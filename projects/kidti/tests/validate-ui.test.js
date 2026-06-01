@@ -119,6 +119,7 @@ setTimeout(() => {
   assert(style.includes("-webkit-tap-highlight-color: transparent"), "CSS 包含 -webkit-tap-highlight-color");
   assert(style.includes("touch-action: manipulation"), "CSS 包含 touch-action: manipulation");
   assert(style.includes("env(safe-area-inset-top)"), "CSS 包含安全区适配");
+  assert(style.includes("#view-result > *") && style.includes("flex-shrink: 0"), "结果页直接子元素禁止 flex 压缩，避免顶部结果卡片被裁成 0 高");
 
   // ===== 4. 动画时长检查 =====
   const transitionMatches = style.matchAll(/transition:[^;]*(\d+)ms/g);
