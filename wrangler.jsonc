@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "child-ti",
+  "compatibility_date": "2026-06-01",
+  "observability": {
+    "enabled": true
+  },
+  "pages_build_output_dir": "projects/kidti/deploy",
+  "assets": {
+    "directory": "projects/kidti/deploy"
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
+}
