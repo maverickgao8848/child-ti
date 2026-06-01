@@ -358,6 +358,18 @@
     .result-image-placeholder .placeholder-icon {
       font-size: 64px;
       opacity: 0.4;
+      position: relative;
+      z-index: 0;
+    }
+
+    .result-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+      z-index: 1;
     }
 
     .result-content {
@@ -880,7 +892,7 @@
     <div class="result-brand">儿童 TI</div>
     <div class="result-card">
       <div class="result-image-placeholder">
-        <img id="result-img" alt="" style="display:none;width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';document.getElementById('result-img-fallback').style.display='flex';">
+        <img id="result-img" alt="" class="result-image">
         <span class="placeholder-icon" id="result-img-fallback">🎭</span>
       </div>
       <div class="result-content">
@@ -1280,7 +1292,7 @@ const PERSONA_MAP = {
     SPOTLIGHT: { STORM: "TNT", LAKE: "STUDY", FOG: "GODD" },
   },
   "REACTOR+SHEEP": {
-    BLACKHOLE: { STORM: "GLUE", LAKE: "502ER", FOG: "RUOK?" },
+    BLACKHOLE: { STORM: "GLUE", LAKE: "502ER", FOG: "RUOK" },
     SPOTLIGHT: { STORM: "JOKER", LAKE: "MAPI", FOG: "TRUMP" },
   },
   "REACTOR+WOLF": {
@@ -1580,7 +1592,7 @@ const PERSONAS = {
         reason: "TA也冷静，但TA的冷出于控制，你的冷出于压抑。你们互相看穿，都讨厌被看穿。两个面具人对视，谁先摘谁就输了。"
       },
       mystery: {
-        code: "RUOK?",
+        code: "RUOK",
         name: "情绪开关",
         reason: "TA怎么能那么直白表达感受？害怕就说害怕。你看着都觉得惊悚，学不来。"
       }
@@ -1830,7 +1842,7 @@ const PERSONAS = {
         reason: "WALL是奖状成精，你是处分收集者，你们活在两个世界——她窗户明净，你窗玻璃上有脚印。"
       },
       mystery: {
-        code: "RUOK?",
+        code: "RUOK",
         name: "情绪开关",
         reason: "RUOK?哭是为了被抱，你闹是为了被看，都是求关注但方式完全不同，你理解不了哭唧唧有什么意思。"
       }
@@ -2040,7 +2052,7 @@ const PERSONAS = {
     prophecy: "长大后你变成了那个'随时在线'的朋友，消息秒回、群聊必接、随叫随到。你通讯录里的人很多，但紧急联系人那一栏你填了很久。你迟早要学会一个道理：502粘得太紧，粘到后头，两个东西都会坏掉。"
   }
 ,
-  "RUOK?": {
+  "RUOK": {
     name: "情绪开关",
     definition: "忽冷忽热的社交演员",
     description: "你的情绪像一台失控的开关，今天把所有人暖化，明天把所有人冻僵。连你自己都不知道下一秒是天使还是恶魔。\n\n全看谁在看着你——这是你最真实的生存法则，也是最深的恐惧。",
@@ -2375,7 +2387,7 @@ const PERSONAS = {
         reason: "他潜伏人群暗中背叛，你暗中操控。都不需要被理解，只需要被关注。一个暗处捅刀一个明处设局，配合默契。"
       },
       worst: {
-        code: "RUOK?",
+        code: "RUOK",
         name: "情绪开关",
         reason: "她情绪全写在脸上，需要帮助、需要回应、需要被看见。你最烦这种'必须接招'的互动，她越渴望连接你越往后退。"
       },
@@ -2776,7 +2788,7 @@ if (typeof module !== "undefined" && module.exports) {
             SPOTLIGHT: { STORM: "TNT",  LAKE: "STUDY", FOG: "GODD" },
           },
           "REACTOR+SHEEP": {
-            BLACKHOLE: { STORM: "GLUE", LAKE: "502ER", FOG: "RUOK?" },
+            BLACKHOLE: { STORM: "GLUE", LAKE: "502ER", FOG: "RUOK" },
             SPOTLIGHT: { STORM: "JOKER", LAKE: "MAPI", FOG: "TRUMP" },
           },
           "REACTOR+WOLF": {
@@ -2815,17 +2827,21 @@ if (typeof module !== "undefined" && module.exports) {
         const fallback = document.getElementById("result-img-fallback");
         const imageCode = state.personaCode.toLowerCase().replace(/[^a-z0-9]/g, '');
         const imgPath = "assets/personas/persona-" + imageCode + ".webp";
+
         img.alt = p.name;
-        img.style.display = "block";
-        fallback.style.display = "none";
+
+        // 先注册事件处理器，再改状态、最后设 src
         img.onload = function() {
           console.log('[KidTI] 人格图片加载成功:', imgPath);
         };
         img.onerror = function() {
-          console.error('[KidTI] 人格图片加载失败:', imgPath, '请检查服务器根目录是否包含 assets/ 文件夹');
+          console.error('[KidTI] 人格图片加载失败:', imgPath);
           img.style.display = 'none';
           fallback.style.display = 'flex';
         };
+
+        img.style.display = "block";
+        fallback.style.display = "none";
         img.src = imgPath;
 
         // ===== v2.0 诊断书渲染 =====
