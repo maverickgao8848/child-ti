@@ -1567,31 +1567,34 @@
         }
         ctx.fillText(line, w / 2, y);
 
-        // QR code
-        const qrY = h - 280;
+        // QR label and code
+        const qrSize = 180;
+        const qrLabelY = h - 330;
+        const qrY = qrLabelY + 34;
+        const qrX = (w - qrSize) / 2;
+
+        ctx.fillStyle = '#6B6B6B';
+        ctx.font = '22px -apple-system, PingFang SC, Microsoft YaHei, sans-serif';
+        ctx.fillText('扫码测测你是什么儿童', w / 2, qrLabelY);
+
         if (typeof kjua !== 'undefined') {
           const qr = kjua({
             render: 'canvas',
             text: window.location.href,
-            size: 180,
+            size: qrSize,
             fill: '#2D2D2D',
             back: '#F7F5F0',
             rounded: 8,
           });
-          ctx.drawImage(qr, (w - 180) / 2, qrY);
+          ctx.drawImage(qr, qrX, qrY, qrSize, qrSize);
         } else {
           ctx.strokeStyle = '#E0DCD4';
           ctx.lineWidth = 2;
-          ctx.strokeRect((w - 180) / 2, qrY, 180, 180);
+          ctx.strokeRect(qrX, qrY, qrSize, qrSize);
           ctx.fillStyle = '#6B6B6B';
           ctx.font = '16px sans-serif';
           ctx.fillText('二维码', w / 2, qrY + 95);
         }
-
-        // QR label
-        ctx.fillStyle = '#6B6B6B';
-        ctx.font = '22px -apple-system, PingFang SC, Microsoft YaHei, sans-serif';
-        ctx.fillText('扫码测测你是什么儿童', w / 2, qrY + 220);
 
         // Footer
         ctx.fillStyle = '#999';
