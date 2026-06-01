@@ -324,6 +324,10 @@
       align-items: center;
     }
 
+    #view-result > * {
+      flex-shrink: 0;
+    }
+
     .result-brand {
       font-size: 14px;
       font-weight: 700;
@@ -918,7 +922,7 @@
         <div class="result-hero-code" id="result-code">----</div>
       </div>
       <div class="result-image-wrapper">
-        <img id="result-img" alt="" class="result-image">
+        <img id="result-img" alt="" class="result-image" loading="eager" decoding="async">
         <span class="placeholder-icon" id="result-img-fallback">🎭</span>
       </div>
       <div class="result-hero-body">
@@ -2863,23 +2867,38 @@ if (typeof module !== "undefined" && module.exports) {
         const img = document.getElementById("result-img");
         const fallback = document.getElementById("result-img-fallback");
         const imageCode = state.personaCode.toLowerCase().replace(/[^a-z0-9]/g, '');
-        const imgPath = "assets/personas/persona-" + imageCode + ".webp";
+        // 加时间戳绕过浏览器缓存，避免 304 返回损坏的缓存数据
+        const imgPath = "assets/personas/persona-" + imageCode + ".webp?v=2";
 
         img.alt = p.name;
 
-        // 先注册事件处理器，再改状态、最后设 src
-        img.onload = function() {
-          console.log('[KidTI] 人格图片加载成功:', imgPath);
-        };
+        // 统一处理图片显示/回退
+        function handleImageSuccess() {
+          if (img.naturalWidth === 0 || img.naturalHeight === 0) {
+            console.error('[KidTI] 图片加载成功但尺寸为 0（可能缓存损坏或解码失败）:', imgPath);
+            img.style.display = 'none';
+            fallback.style.display = 'flex';
+            return;
+          }
+          console.log('[KidTI] 人格图片加载成功:', imgPath, img.naturalWidth + 'x' + img.naturalHeight);
+          img.style.display = 'block';
+          fallback.style.display = 'none';
+        }
+
+        img.onload = handleImageSuccess;
         img.onerror = function() {
           console.error('[KidTI] 人格图片加载失败:', imgPath);
           img.style.display = 'none';
           fallback.style.display = 'flex';
         };
 
-        img.style.display = "block";
-        fallback.style.display = "none";
+        // 如果图片已缓存（complete=true），onload 不会触发，需手动检查
+        img.style.display = 'none';
+        fallback.style.display = 'flex';
         img.src = imgPath;
+        if (img.complete) {
+          handleImageSuccess();
+        }
 
         // ===== v2.0 诊断书渲染 =====
         const diagBook = document.getElementById("diagnosis-book");
