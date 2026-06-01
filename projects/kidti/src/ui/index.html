@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>儿童TI — 你是什么儿童？</title>
+  <meta name="description" content="24道题测出你的童年人格。纯属娱乐，无心理学背书，结果仅供参考，不构成育儿建议。">
+  
+  <!-- OG / Twitter Cards -->
+  <meta property="og:title" content="儿童TI — 你是什么儿童？">
+  <meta property="og:description" content="24道题测出你的童年人格。纯属娱乐，无心理学背书。">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="./assets/og-share-square.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="./assets/og-share-square.png">
+
+  <style>
+    /* ===== CSS Variables ===== */
+    :root {
+      --bg: #F7F5F0;
+      --bg-warm: #F0EBE3;
+      --text: #2D2D2D;
+      --text-secondary: #6B6B6B;
+      --accent: #FF6B6B;
+      --accent-warm: #FFB347;
+      --accent-cool: #4ECDC4;
+      --border: #E0DCD4;
+      --card: #FFFFFF;
+      --shadow: 0 4px 20px rgba(0,0,0,0.08);
+      --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --safe-top: env(safe-area-inset-top);
+      --safe-bottom: env(safe-area-inset-bottom);
+    }
+
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== View System ===== */
+    .view {
+      position: fixed;
+      inset: 0;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      opacity: 1;
+      transform: translateX(0);
+      transition: opacity 180ms ease, transform 180ms ease;
+      padding: var(--safe-top) 20px calc(20px + var(--safe-bottom));
+    }
+
+    .view.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(20px);
+      z-index: -1;
+    }
+
+    /* ===== Start Page ===== */
+    #view-start {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: linear-gradient(180deg, var(--bg) 0%, var(--bg-warm) 100%);
+    }
+
+    .start-brand {
+      margin-bottom: 24px;
+    }
+
+    .start-brand h1 {
+      font-size: 48px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      color: var(--text);
+      line-height: 1.1;
+    }
+
+    .start-brand .subtitle {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-top: 8px;
+    }
+
+    .start-info {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-bottom: 40px;
+      max-width: 280px;
+    }
+
+    .start-info .highlight {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 240px;
+      height: 56px;
+      border: none;
+      border-radius: 28px;
+      background: linear-gradient(135deg, var(--accent) 0%, #FF8E8E 100%);
+      color: #fff;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: transform 120ms ease, box-shadow 120ms ease;
+      -webkit-appearance: none;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.97);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .start-footer {
+      position: absolute;
+      bottom: calc(24px + var(--safe-bottom));
+      font-size: 12px;
+      color: var(--text-secondary);
+      opacity: 0.7;
+      max-width: 320px;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* ===== Quiz Page ===== */
+    #view-quiz {
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .quiz-header {
+      padding-top: 12px;
+      margin-bottom: 20px;
+      flex-shrink: 0;
+    }
+
+    .quiz-header .brand-mini {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .progress-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      white-space: nowrap;
+      min-width: 90px;
+    }
+
+    .progress-track {
+      flex: 1;
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-cool), var(--accent-warm));
+      border-radius: 3px;
+      transition: width 250ms ease;
+      width: 0%;
+    }
+
+    .quiz-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding-top: 16px;
+    }
+
+    .question-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .question-text {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.5;
+      color: var(--text);
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-btn {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      width: 100%;
+      padding: 16px 18px;
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 120ms ease, background 120ms ease, transform 80ms ease;
+      -webkit-appearance: none;
+    }
+
+    .option-btn:active {
+      transform: scale(0.99);
+    }
+
+    .option-btn.selected {
+      border-color: var(--accent-cool);
+      background: rgba(78, 205, 196, 0.08);
+    }
+
+    .option-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--bg-warm);
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .option-btn.selected .option-label {
+      background: var(--accent-cool);
+      color: #fff;
+    }
+
+    .option-text {
+      font-size: 16px;
+      color: var(--text);
+      line-height: 1.5;
+      padding-top: 2px;
+    }
+
+    .quiz-footer {
+      padding: 16px 0 8px;
+      flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 28px;
+      border: 1.5px solid var(--border);
+      border-radius: 24px;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 120ms ease;
+      -webkit-appearance: none;
+    }
+
+    .btn-secondary:active {
+      background: var(--bg-warm);
+    }
+
+    .btn-secondary.hidden {
+      display: none;
+    }
+
+    /* ===== Result Page ===== */
+    #view-result {
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .result-brand {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-top: 8px;
+      margin-bottom: 16px;
+    }
+
+    .result-card {
+      width: 100%;
+      max-width: 400px;
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .result-hero {
+      padding: 24px 24px 0;
+      text-align: center;
+    }
+
+    .result-hero-label {
+      font-size: 16px;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .result-hero-name {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .result-hero-code {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+
+    .result-image-wrapper {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      min-height: 280px;
+      max-height: 360px;
+      background: linear-gradient(135deg, var(--bg-warm) 0%, #E8E4DC 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--text-secondary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .result-image-wrapper .placeholder-icon {
+      font-size: 80px;
+      opacity: 0.4;
+      position: relative;
+      z-index: 0;
+    }
+
+    .result-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+      z-index: 1;
+    }
+
+    .result-hero-body {
+      padding: 20px 24px 24px;
+    }
+
+    .result-oneliner {
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.6;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .result-label {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .result-slogan {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-style: italic;
+      text-align: center;
+      padding: 10px 16px;
+      background: var(--bg-warm);
+      border-radius: var(--radius-sm);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .result-detail {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+
+    .result-detail .result-label {
+      margin-bottom: 8px;
+    }
+
+    .result-detail-body p {
+      margin-bottom: 10px;
+    }
+
+    .result-detail-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Dimension Bars */
+    .dimensions-section {
+      width: 100%;
+      max-width: 400px;
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px 24px;
+      margin-bottom: 20px;
+    }
+
+    .dimensions-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .dim-item {
+      margin-bottom: 16px;
+    }
+
+    .dim-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .dim-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .dim-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .dim-value {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .dim-bar-track {
+      height: 8px;
+      background: var(--bg-warm);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .dim-bar-track::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+      z-index: 2;
+    }
+
+    .dim-bar-fill {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      border-radius: 4px;
+      transition: left 600ms ease, width 600ms ease;
+      min-width: 0;
+    }
+
+    .dim-bar-fill.nrg { background: linear-gradient(90deg, #FF6B6B, #FFB347); }
+    .dim-bar-fill.rul { background: linear-gradient(90deg, #4ECDC4, #44A08D); }
+    .dim-bar-fill.pre { background: linear-gradient(90deg, #667EEA, #764BA2); }
+    .dim-bar-fill.emo { background: linear-gradient(90deg, #F093FB, #F5576C); }
+
+    /* ===== Personality Reading (MBTI-style) ===== */
+    /* ===== Diagnosis Book (v2.0) ===== */
+    .diagnosis-book {
+      width: 100%;
+      max-width: 400px;
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px 24px;
+      margin-bottom: 20px;
+    }
+
+    .diagnosis-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--bg-warm);
+    }
+
+    .diagnosis-icon {
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .diagnosis-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: 0.5px;
+    }
+
+    .diagnosis-subtitle {
+      font-size: 11px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      margin-left: auto;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .diag-section {
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px dashed var(--border);
+    }
+
+    .diag-section:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .diag-section-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .diag-section-title .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .diag-body {
+      font-size: 14px;
+      line-height: 1.85;
+      color: var(--text);
+      text-align: left;
+    }
+
+    .diag-body p {
+      margin-bottom: 10px;
+    }
+
+    .diag-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Component breakdown */
+    .comp-item {
+      margin-bottom: 14px;
+      padding-left: 12px;
+      border-left: 3px solid var(--border);
+    }
+
+    .comp-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .comp-item.nrg { border-left-color: #FF6B6B; }
+    .comp-item.rul { border-left-color: #4ECDC4; }
+    .comp-item.pre { border-left-color: #667EEA; }
+    .comp-item.emo { border-left-color: #F5576C; }
+
+    .comp-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .comp-text {
+      font-size: 13px;
+      line-height: 1.75;
+      color: var(--text);
+    }
+
+    /* Scenario scripts */
+    .scenario-item {
+      margin-bottom: 14px;
+      padding: 10px 12px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+    }
+
+    .scenario-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .scenario-icon {
+      font-size: 16px;
+      margin-right: 4px;
+    }
+
+    .scenario-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .scenario-text {
+      font-size: 13px;
+      line-height: 1.75;
+      color: var(--text);
+    }
+
+    /* Relations */
+    .relations-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .relation-card {
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+    }
+
+    .relation-card.best { background: rgba(78, 205, 196, 0.08); border: 1px solid rgba(78, 205, 196, 0.2); }
+    .relation-card.worst { background: rgba(255, 107, 107, 0.06); border: 1px solid rgba(255, 107, 107, 0.15); }
+    .relation-card.mystery { background: rgba(102, 126, 234, 0.06); border: 1px solid rgba(102, 126, 234, 0.15); }
+
+    .relation-tag {
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .relation-tag.best { color: #44A08D; }
+    .relation-tag.worst { color: #FF6B6B; }
+    .relation-tag.mystery { color: #667EEA; }
+
+    .relation-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .relation-reason {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Prophecy */
+    .prophecy-box {
+      padding: 14px 16px;
+      background: linear-gradient(135deg, var(--bg-warm) 0%, #F0EBE3 100%);
+      border-radius: var(--radius-sm);
+      border-left: 3px solid var(--accent-warm);
+    }
+
+    .prophecy-text {
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--text);
+      font-style: italic;
+    }
+
+    .dim-poles {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 4px;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    /* Action Buttons */
+    .result-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 20px;
+    }
+
+    .btn-share {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 52px;
+      border: none;
+      border-radius: 26px;
+      background: linear-gradient(135deg, var(--accent-cool) 0%, #44A08D 100%);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: transform 120ms ease;
+      -webkit-appearance: none;
+    }
+
+    .btn-share:active {
+      transform: scale(0.97);
+    }
+
+    .btn-retry {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 48px;
+      border: 1.5px solid var(--border);
+      border-radius: 24px;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 120ms ease;
+      -webkit-appearance: none;
+    }
+
+    .btn-retry:active {
+      background: var(--bg-warm);
+    }
+
+    .qr-placeholder {
+      width: 120px;
+      height: 120px;
+      background: var(--bg-warm);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
+
+    /* ===== Poster Modal ===== */
+    .poster-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+      transition: opacity 200ms ease;
+    }
+    .poster-modal.hidden {
+      opacity: 0;
+      pointer-events: none;
+      z-index: -1;
+    }
+    .poster-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+    }
+    .poster-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 20px;
+      max-width: 90vw;
+    }
+    #poster-canvas {
+      max-width: 100%;
+      max-height: 70vh;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .poster-actions {
+      display: flex;
+      gap: 12px;
+    }
+    .poster-actions .btn-primary,
+    .poster-actions .btn-secondary {
+      padding: 12px 28px;
+      font-size: 15px;
+    }
+
+    /* ===== Responsive ===== */
+    @media (min-width: 768px) {
+      .view {
+        padding-left: 40px;
+        padding-right: 40px;
+      }
+    }
+
+    /* ===== Reduced Motion ===== */
+    @media (prefers-reduced-motion: reduce) {
+      .view, .progress-fill, .dim-bar-fill, .option-btn, .btn-primary, .btn-share, .btn-retry, .btn-secondary {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== Start Page ========== -->
+  <div id="view-start" class="view">
+    <div class="start-brand">
+      <h1>儿童 TI</h1>
+      <div class="subtitle">你是什么儿童？</div>
+    </div>
+    <div class="start-info">
+      <span class="highlight">24 道题</span>，测出你的童年人格<br>
+      3-5 分钟 · 纯属娱乐
+    </div>
+    <button class="btn-primary" id="btn-start" onclick="app.startQuiz()">开始测试</button>
+    <div class="start-footer">
+      本测试纯属娱乐，无心理学专业背书。<br>
+      结果仅供参考，不构成任何育儿或医疗建议。
+    </div>
+  </div>
+
+  <!-- ========== Quiz Page ========== -->
+  <div id="view-quiz" class="view hidden">
+    <div class="quiz-header">
+      <div class="brand-mini">儿童 TI</div>
+      <div class="progress-wrap">
+        <div class="progress-text" id="progress-text">第 1 题 / 共 24 题</div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+    </div>
+    <div class="quiz-body">
+      <div class="question-card">
+        <div class="question-text" id="question-text">题目加载中…</div>
+      </div>
+      <div class="options-list" id="options-list"></div>
+    </div>
+    <div class="quiz-footer">
+      <button class="btn-secondary hidden" id="btn-prev" onclick="app.goPrev()">上一题</button>
+    </div>
+  </div>
+
+  <!-- ========== Result Page ========== -->
+  <div id="view-result" class="view hidden">
+    <div class="result-brand">儿童 TI</div>
+    <div class="result-card">
+      <div class="result-hero">
+        <div class="result-hero-label">你的人格类型是：</div>
+        <div class="result-hero-name" id="result-name">--</div>
+        <div class="result-hero-code" id="result-code">----</div>
+      </div>
+      <div class="result-image-wrapper">
+        <img id="result-img" alt="" class="result-image" loading="eager" decoding="async">
+        <span class="placeholder-icon" id="result-img-fallback">🎭</span>
+      </div>
+      <div class="result-hero-body">
+        <div class="result-oneliner">
+          <span class="result-label">一句话描述：</span>
+          <span id="result-tagline">--</span>
+        </div>
+        <div class="result-slogan" id="result-slogan">--</div>
+        <div class="result-detail" id="result-detail">
+          <div class="result-label">详细解读：</div>
+          <div class="result-detail-body" id="result-description"></div>
+        </div>
+      </div>
+    </div>
+    <div class="dimensions-section">
+      <div class="dimensions-title">你的童年人格维度</div>
+      <div id="dimensions-list"></div>
+    </div>
+
+    <!-- ========== Diagnosis Book (v2.0) ========== -->
+    <div class="diagnosis-book" id="diagnosis-book">
+      <div class="diagnosis-header">
+        <span class="diagnosis-icon">🧠</span>
+        <span class="diagnosis-title">人格诊断书</span>
+        <span class="diagnosis-subtitle">KidTI Analysis</span>
+      </div>
+
+      <!-- 核心画像 -->
+      <div class="diag-section" id="diag-portrait">
+        <div class="diag-section-title"><span class="dot"></span>核心画像</div>
+        <div class="diag-body" id="diag-portrait-body"></div>
+      </div>
+
+      <!-- 人格成分解析 -->
+      <div class="diag-section" id="diag-components">
+        <div class="diag-section-title"><span class="dot"></span>人格成分解析</div>
+        <div id="diag-components-body"></div>
+      </div>
+
+      <!-- 情境剧本 -->
+      <div class="diag-section" id="diag-scenarios">
+        <div class="diag-section-title"><span class="dot"></span>情境剧本</div>
+        <div id="diag-scenarios-body"></div>
+      </div>
+
+      <!-- 隐藏档案 -->
+      <div class="diag-section" id="diag-hidden">
+        <div class="diag-section-title"><span class="dot"></span>隐藏档案</div>
+        <div class="diag-body" id="diag-hidden-body"></div>
+      </div>
+
+      <!-- 人格关系谱 -->
+      <div class="diag-section" id="diag-relations">
+        <div class="diag-section-title"><span class="dot"></span>人格关系谱</div>
+        <div class="relations-grid" id="diag-relations-body"></div>
+      </div>
+
+      <!-- 成长预言 -->
+      <div class="diag-section" id="diag-prophecy">
+        <div class="diag-section-title"><span class="dot"></span>成长预言</div>
+        <div class="prophecy-box">
+          <div class="prophecy-text" id="diag-prophecy-body"></div>
+        </div>
+      </div>
+    </div>
+    
+  <!-- Poster Modal -->
+  <div id="poster-modal" class="poster-modal hidden">
+    <div class="poster-overlay" onclick="app.closePoster()"></div>
+    <div class="poster-content">
+      <canvas id="poster-canvas" width="750" height="1334"></canvas>
+      <div class="poster-actions">
+        <button class="btn-primary" id="btn-save-poster" onclick="app.savePoster()">保存图片</button>
+        <button class="btn-secondary" onclick="app.closePoster()">关闭</button>
+      </div>
+    </div>
+  </div>
+  <div class="result-actions">
+      <button class="btn-share" id="btn-share" onclick="app.shareResult()">分享给朋友</button>
+      <button class="btn-secondary" id="btn-copy" onclick="app.copyLink()">复制链接</button>
+      <button class="btn-retry" id="btn-retry" onclick="app.restart()">重新测试</button>
+    </div>
+    <div class="qr-placeholder" id="qr-placeholder">二维码</div>
+  </div>
+
+  <!-- Config layers -->
+  <script src="../config/questions.js"></script>
+  <script src="../config/scoring.js"></script>
+  <script src="../config/personas.js"></script>
+
+  <script>
+    /* =========================================================
+       KidTI — 单页应用主逻辑
+       ========================================================= */
+
+
+
+    // 维度标签映射
+    const DIMENSION_META = {
+      NRG: { label: "能量源",    low: "REACTOR 放电型", high: "BATTERY 充电型", css: "nrg" },
+      RUL: { label: "规则观",    low: "WOLF 反骨型",    high: "SHEEP 顺毛型",   css: "rul" },
+      PRE: { label: "存在感",    low: "SPOTLIGHT 聚光型",high: "BLACKHOLE 黑洞型",css: "pre" },
+      EMO: { label: "情绪天气",  low: "LAKE 静海型",    high: "STORM 暴雨型",   css: "emo", fog: "FOG 迷雾型" },
+    };
+
+    // 从题目数据计算各维度的理论最大/最小分值
+    function computeDimensionBounds() {
+      const bounds = { NRG: { min: 0, max: 0 }, RUL: { min: 0, max: 0 }, PRE: { min: 0, max: 0 }, EMO: { min: 0, max: 0 } };
+      QUESTIONS.forEach(q => {
+        const dimMax = { NRG: -Infinity, RUL: -Infinity, PRE: -Infinity, EMO: -Infinity };
+        const dimMin = { NRG: Infinity, RUL: Infinity, PRE: Infinity, EMO: Infinity };
+        q.options.forEach(opt => {
+          Object.entries(opt.scores).forEach(([dim, val]) => {
+            dimMax[dim] = Math.max(dimMax[dim], val);
+            dimMin[dim] = Math.min(dimMin[dim], val);
+          });
+        });
+        ['NRG', 'RUL', 'PRE', 'EMO'].forEach(dim => {
+          if (dimMax[dim] !== -Infinity) bounds[dim].max += dimMax[dim];
+          if (dimMin[dim] !== Infinity) bounds[dim].min += dimMin[dim];
+        });
+      });
+      return bounds;
+    }
+    const DIM_BOUNDS = computeDimensionBounds();
+
+    // ----- 状态对象 -----
+    const state = window.state = {
+      currentQuestion: 0,
+      answers: [],       // 每题选中的 option index
+      scores: { NRG: 0, RUL: 0, PRE: 0, EMO: 0 },
+      d4Scores: [],      // D4 每题的 EMO 分值，用于方差计算
+      personaCode: null,
+    };
+
+    // ----- DOM 引用 -----
+    const $ = (id) => document.getElementById(id);
+    const views = {
+      start:  $('view-start'),
+      quiz:   $('view-quiz'),
+      result: $('view-result'),
+    };
+
+    // ----- 视图切换 -----
+    function switchView(name) {
+      Object.values(views).forEach(el => el.classList.add('hidden'));
+      views[name].classList.remove('hidden');
+      // 同步 URL（避免污染历史）
+      const url = new URL(window.location.href);
+      if (name === 'start') {
+        url.searchParams.delete('view');
+        url.searchParams.delete('code');
+      } else {
+        url.searchParams.set('view', name);
+      }
+      window.history.replaceState(null, '', url.toString());
+      // 滚动置顶
+      views[name].scrollTop = 0;
+    }
+
+    // ----- 应用对象 -----
+    const app = {
+      init() {
+        // 解析 URL 参数
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get('code');
+        const view = params.get('view');
+
+        if (code && PERSONAS[code.toUpperCase()]) {
+          // 深链直接进结果页
+          this.showResult(code.toUpperCase());
+          return;
+        }
+
+        if (view === 'quiz' && state.answers.length > 0) {
+          switchView('quiz');
+          this.renderQuestion();
+        } else if (view === 'result' && state.personaCode) {
+          switchView('result');
+          this.renderResult();
+        } else {
+          switchView('start');
+        }
+      },
+
+      startQuiz() {
+        // 重置状态
+        state.currentQuestion = 0;
+        state.answers = [];
+        state.scores = { NRG: 0, RUL: 0, PRE: 0, EMO: 0 };
+        state.d4Scores = [];
+        state.personaCode = null;
+        switchView('quiz');
+        this.renderQuestion();
+      },
+
+      renderQuestion() {
+        const q = QUESTIONS[state.currentQuestion];
+        const total = QUESTIONS.length;
+        const current = state.currentQuestion + 1;
+
+        // 进度
+        $('progress-text').textContent = `第 ${current} 题 / 共 ${total} 题`;
+        $('progress-fill').style.width = `${(current / total) * 100}%`;
+
+        // 题目
+        $('question-text').textContent = q.text;
+
+        // 选项
+        const list = $('options-list');
+        list.innerHTML = '';
+        q.options.forEach((opt, idx) => {
+          const btn = document.createElement('button');
+          btn.className = 'option-btn';
+          if (state.answers[state.currentQuestion] === idx) {
+            btn.classList.add('selected');
+          }
+          btn.innerHTML = `
+            <span class="option-label">${opt.label}</span>
+            <span class="option-text">${opt.text}</span>
+          `;
+          btn.onclick = () => this.selectOption(idx);
+          list.appendChild(btn);
+        });
+
+        // 上一题按钮
+        $('btn-prev').classList.toggle('hidden', state.currentQuestion === 0);
+      },
+
+      selectOption(idx) {
+        const q = QUESTIONS[state.currentQuestion];
+        const prevIdx = state.answers[state.currentQuestion];
+
+        // 如果已经选过，先减去旧分数
+        if (prevIdx !== undefined) {
+          const prevOpt = q.options[prevIdx];
+          Object.entries(prevOpt.scores).forEach(([dim, val]) => {
+            state.scores[dim] -= val;
+          });
+          if (q.dimension === 'EMO') {
+            state.d4Scores.pop();
+          }
+        }
+
+        // 记录新答案
+        state.answers[state.currentQuestion] = idx;
+        const opt = q.options[idx];
+        Object.entries(opt.scores).forEach(([dim, val]) => {
+          state.scores[dim] += val;
+        });
+        if (q.dimension === 'EMO') {
+          state.d4Scores.push(opt.scores.EMO || 0);
+        }
+
+        // 自动前进
+        if (state.currentQuestion < QUESTIONS.length - 1) {
+          state.currentQuestion += 1;
+          this.renderQuestion();
+        } else {
+          this.finishQuiz();
+        }
+      },
+
+      goPrev() {
+        if (state.currentQuestion > 0) {
+          state.currentQuestion -= 1;
+          this.renderQuestion();
+        }
+      },
+
+      finishQuiz() {
+        // 计算维度极性
+        const dims = this.calculateDimensions();
+        // 匹配人格
+        const code = typeof matchPersona === 'function'
+          ? matchPersona(dims)
+          : this._matchPersonaFallback(dims);
+        state.personaCode = code;
+        this.showResult(code);
+      },
+
+      calculateDimensions() {
+        // D1/D2/D3: 高分 = high, 低分 = low
+        // 判定阈值：以 0 为界（正负分），实际分范围约 ±12
+        const dims = {};
+        dims.NRG = state.scores.NRG >= 0 ? 'BATTERY' : 'REACTOR';
+        dims.RUL = state.scores.RUL >= 0 ? 'SHEEP' : 'WOLF';
+        dims.PRE = state.scores.PRE >= 0 ? 'BLACKHOLE' : 'SPOTLIGHT';
+
+        // D4: 使用 scoring.js 的 calculateD4，或内联回退
+        if (typeof calculateD4 === 'function' && state.d4Scores.length > 0) {
+          const d4 = calculateD4(state.d4Scores);
+          dims.EMO = d4.result;
+        } else {
+          dims.EMO = this._calculateD4Fallback();
+        }
+        return dims;
+      },
+
+      _calculateD4Fallback() {
+        if (state.d4Scores.length === 0) return 'FOG';
+        const n = state.d4Scores.length;
+        const mean = state.d4Scores.reduce((a, b) => a + b, 0) / n;
+        const variance = state.d4Scores.reduce((s, v) => s + Math.pow(v - mean, 2), 0) / n;
+        const threshold = 3.5;
+        if (variance > threshold) return 'FOG';
+        return mean >= 0 ? 'STORM' : 'LAKE';
+      },
+
+      _matchPersonaFallback(dims) {
+        const map = {
+          "BATTERY+SHEEP": {
+            BLACKHOLE: { STORM: "KPBL", LAKE: "WALL", FOG: "IMOK" },
+            SPOTLIGHT: { STORM: "KPI",  LAKE: "DAREN", FOG: "CTRLC" },
+          },
+          "BATTERY+WOLF": {
+            BLACKHOLE: { STORM: "NUKE", LAKE: "DAMN", FOG: "NEIG" },
+            SPOTLIGHT: { STORM: "TNT",  LAKE: "STUDY", FOG: "GODD" },
+          },
+          "REACTOR+SHEEP": {
+            BLACKHOLE: { STORM: "GLUE", LAKE: "502ER", FOG: "RUOK" },
+            SPOTLIGHT: { STORM: "JOKER", LAKE: "MAPI", FOG: "TRUMP" },
+          },
+          "REACTOR+WOLF": {
+            BLACKHOLE: { STORM: "CHAOS", LAKE: "STEAM", FOG: "IPHONE" },
+            SPOTLIGHT: { STORM: "BOSS",  LAKE: "YINM", FOG: "ELON" },
+          },
+        };
+        const key = `${dims.NRG}+${dims.RUL}`;
+        return map[key]?.[dims.PRE]?.[dims.EMO] || 'KPBL';
+      },
+
+      showResult(code) {
+        state.personaCode = code;
+        switchView('result');
+        this.renderResult();
+      },
+
+      renderResult() {
+        const p = PERSONAS[state.personaCode] || PERSONAS["KPBL"];
+        document.getElementById("result-code").textContent = state.personaCode;
+        document.getElementById("result-name").textContent = p.name;
+        document.getElementById("result-tagline").textContent = p.definition || p.tagline || "";
+        const sloganEl = document.getElementById("result-slogan");
+        if (p.slogan) {
+          sloganEl.textContent = p.slogan;
+          sloganEl.style.display = "block";
+        } else {
+          sloganEl.style.display = "none";
+        }
+
+        // 详细解读
+        const descEl = document.getElementById("result-description");
+        const detailEl = document.getElementById("result-detail");
+        if (p.description) {
+          descEl.innerHTML = p.description.split("\n").map(par => "<p>" + par + "</p>").join("");
+          detailEl.style.display = "block";
+        } else {
+          detailEl.style.display = "none";
+        }
+
+        // 配图
+        const img = document.getElementById("result-img");
+        const fallback = document.getElementById("result-img-fallback");
+        const imageCode = state.personaCode.toLowerCase().replace(/[^a-z0-9]/g, '');
+        // 加时间戳绕过浏览器缓存，避免 304 返回损坏的缓存数据
+        const imgPath = "./assets/personas/persona-" + imageCode + ".webp?v=2";
+
+        img.alt = p.name;
+
+        // 统一处理图片显示/回退
+        function handleImageSuccess() {
+          if (img.naturalWidth === 0 || img.naturalHeight === 0) {
+            console.error('[KidTI] 图片加载成功但尺寸为 0（可能缓存损坏或解码失败）:', imgPath);
+            img.style.display = 'none';
+            fallback.style.display = 'flex';
+            return;
+          }
+          console.log('[KidTI] 人格图片加载成功:', imgPath, img.naturalWidth + 'x' + img.naturalHeight);
+          img.style.display = 'block';
+          fallback.style.display = 'none';
+        }
+
+        img.onload = handleImageSuccess;
+        img.onerror = function() {
+          console.error('[KidTI] 人格图片加载失败:', imgPath);
+          img.style.display = 'none';
+          fallback.style.display = 'flex';
+        };
+
+        // 如果图片已缓存（complete=true），onload 不会触发，需手动检查
+        img.style.display = 'none';
+        fallback.style.display = 'flex';
+        img.src = imgPath;
+        if (img.complete) {
+          handleImageSuccess();
+        }
+
+        // ===== v2.0 诊断书渲染 =====
+        const diagBook = document.getElementById("diagnosis-book");
+
+        // 核心画像
+        const portraitEl = document.getElementById("diag-portrait-body");
+        if (p.reading) {
+          portraitEl.innerHTML = p.reading.split("\n").map(par => "<p>" + par + "</p>").join("");
+          document.getElementById("diag-portrait").style.display = "block";
+        } else {
+          document.getElementById("diag-portrait").style.display = "none";
+        }
+
+        // 人格成分解析
+        const compEl = document.getElementById("diag-components-body");
+        if (p.components) {
+          const compMeta = [
+            { key: 'nrg', label: '能量源', css: 'nrg' },
+            { key: 'rul', label: '规则观', css: 'rul' },
+            { key: 'pre', label: '存在感', css: 'pre' },
+            { key: 'emo', label: '情绪天气', css: 'emo' },
+          ];
+          compEl.innerHTML = compMeta.map(c => {
+            const text = p.components[c.key];
+            return '<div class="comp-item ' + c.css + '"><div class="comp-label">' + c.label + '</div><div class="comp-text">' + text + '</div></div>';
+          }).join('');
+          document.getElementById("diag-components").style.display = "block";
+        } else {
+          document.getElementById("diag-components").style.display = "none";
+        }
+
+        // 情境剧本
+        const scenEl = document.getElementById("diag-scenarios-body");
+        if (p.scenarios) {
+          const scenMeta = [
+            { key: 'family', icon: '🏠', label: '家庭餐桌' },
+            { key: 'classroom', icon: '🎓', label: '学校课堂' },
+            { key: 'social', icon: '👥', label: '课间社交' },
+            { key: 'alone', icon: '🌙', label: '独处时刻' },
+            { key: 'crisis', icon: '⚡', label: '突发冲突' },
+          ];
+          scenEl.innerHTML = scenMeta.map(s => {
+            const text = p.scenarios[s.key];
+            return '<div class="scenario-item"><div class="scenario-label"><span class="scenario-icon">' + s.icon + '</span>' + s.label + '</div><div class="scenario-text">' + text + '</div></div>';
+          }).join('');
+          document.getElementById("diag-scenarios").style.display = "block";
+        } else {
+          document.getElementById("diag-scenarios").style.display = "none";
+        }
+
+        // 隐藏档案
+        const hiddenEl = document.getElementById("diag-hidden-body");
+        if (p.hidden) {
+          hiddenEl.innerHTML = '<p>' + p.hidden + '</p>';
+          document.getElementById("diag-hidden").style.display = "block";
+        } else {
+          document.getElementById("diag-hidden").style.display = "none";
+        }
+
+        // 人格关系谱
+        const relEl = document.getElementById("diag-relations-body");
+        if (p.relations) {
+          const relMeta = [
+            { key: 'best', tag: '最佳拍档', css: 'best' },
+            { key: 'worst', tag: '天生冤家', css: 'worst' },
+            { key: 'mystery', tag: '最看不懂', css: 'mystery' },
+          ];
+          relEl.innerHTML = relMeta.map(r => {
+            const data = p.relations[r.key];
+            return '<div class="relation-card ' + r.css + '"><div class="relation-tag ' + r.css + '">' + r.tag + '</div><div class="relation-name">' + data.code + ' · ' + data.name + '</div><div class="relation-reason">' + data.reason + '</div></div>';
+          }).join('');
+          document.getElementById("diag-relations").style.display = "block";
+        } else {
+          document.getElementById("diag-relations").style.display = "none";
+        }
+
+        // 成长预言
+        const prophEl = document.getElementById("diag-prophecy-body");
+        if (p.prophecy) {
+          prophEl.textContent = p.prophecy;
+          document.getElementById("diag-prophecy").style.display = "block";
+        } else {
+          document.getElementById("diag-prophecy").style.display = "none";
+        }
+
+        // 如果没有任何 v2.0 字段，隐藏整个诊断书
+        const hasV2 = p.components || p.scenarios || p.hidden || p.relations || p.prophecy;
+        diagBook.style.display = (p.reading || hasV2) ? "block" : "none";
+
+        // 维度条
+        const hasQuizData = state.answers.length === QUESTIONS.length;
+        const container = document.getElementById("dimensions-list");
+        container.innerHTML = "";
+
+        if (!hasQuizData) {
+          container.innerHTML = '<div style="text-align:center;color:var(--text-secondary);font-size:13px;padding:12px 0;">完成测试后查看你的维度分析</div>';
+        } else {
+          const dims = this.calculateDimensions();
+          const dimKeys = ["NRG", "RUL", "PRE", "EMO"];
+
+          dimKeys.forEach(key => {
+            const meta = DIMENSION_META[key];
+            const score = state.scores[key];
+            const bound = DIM_BOUNDS[key];
+
+            let left, width;
+            if (score >= 0) {
+              const ratio = bound.max > 0 ? score / bound.max : 0;
+              const pct = Math.min(ratio * 50, 50);
+              left = 50;
+              width = pct;
+            } else {
+              const ratio = bound.min < 0 ? Math.abs(score) / Math.abs(bound.min) : 0;
+              const pct = Math.min(ratio * 50, 50);
+              left = 50 - pct;
+              width = pct;
+            }
+
+            let labelText;
+            if (key === "EMO") {
+              labelText = dims.EMO === "FOG" ? meta.fog : (dims.EMO === "STORM" ? meta.high : meta.low);
+            } else {
+              labelText = dims[key] === meta.high.split(" ")[0] ? meta.high : meta.low;
+            }
+
+            const item = document.createElement("div");
+            item.className = "dim-item";
+            item.innerHTML = '<div class="dim-header"><span class="dim-label">' + meta.label + '</span><span class="dim-value">' + labelText + '</span></div><div class="dim-bar-track"><div class="dim-bar-fill ' + meta.css + '" style="left: ' + left + '%; width: ' + width + '%"></div></div><div class="dim-poles"><span>' + meta.low.split(" ")[0] + '</span><span>' + meta.high.split(" ")[0] + '</span></div>';
+            container.appendChild(item);
+          });
+        }
+
+        // 同步 URL code 参数
+        const url = new URL(window.location.href);
+        url.searchParams.set("view", "result");
+        url.searchParams.set("code", state.personaCode);
+        window.history.replaceState(null, "", url.toString());
+      },
+
+
+
+
+      // ===== Poster / Share Methods =====
+
+      copyLink() {
+        const url = window.location.href;
+        const text = "我在儿童TI测出了「" + state.personaCode + "」——" + (PERSONAS[state.personaCode]?.name || "") + "。你是什么儿童？";
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText().then(() => {
+            alert('结果链接已复制到剪贴板');
+          }).catch(() => {
+            prompt('复制以下链接分享给朋友：', url);
+          });
+        } else {
+          prompt('复制以下链接分享给朋友：', url);
+        }
+      },
+
+      drawPosterBase(ctx, p, w, h) {
+        // Background
+        ctx.fillStyle = '#F7F5F0';
+        ctx.fillRect(0, 0, w, h);
+
+        // Border
+        ctx.strokeStyle = '#E0DCD4';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(20, 20, w - 40, h - 40);
+
+        // Brand
+        ctx.fillStyle = '#2D2D2D';
+        ctx.font = 'bold 36px -apple-system, PingFang SC, Microsoft YaHei, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('儿童TI', w / 2, 80);
+        ctx.font = '22px -apple-system, PingFang SC, Microsoft YaHei, sans-serif';
+        ctx.fillStyle = '#6B6B6B';
+        ctx.fillText('你是什么儿童？', w / 2, 115);
+
+        // Code
+        ctx.fillStyle = '#2D2D2D';
+        ctx.font = 'bold 72px -apple-system, PingFang SC, Microsoft YaHei, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(state.personaCode, w / 2, 560);
+
+        // Name
+        ctx.fillStyle = '#FF6B6B';
+        ctx.font = 'bold 40px -apple-system, PingFang SC, Microsoft YaHei, sans-serif';
+        ctx.fillText(p.name, w / 2, 620);
+
+        // Definition
+        ctx.fillStyle = '#6B6B6B';
+        ctx.font = '26px -apple-system, PingFang SC, Microsoft YaHei, sans-serif';
+        const def = p.definition || p.tagline || '';
+        ctx.fillText(def, w / 2, 670);
+
+        // Slogan
+        ctx.fillStyle = '#2D2D2D';
+        ctx.font = 'italic 24px -apple-system, PingFang SC, Microsoft YaHei, sans-serif';
+        const slogan = p.slogan || '';
+        const maxWidth = w - 120;
+        const words = slogan.split('');
+        let line = '';
+        let y = 730;
+        for (let i = 0; i < words.length; i++) {
+          const testLine = line + words[i];
+          const metrics = ctx.measureText(testLine);
+          if (metrics.width > maxWidth && i > 0) {
+            ctx.fillText(line, w / 2, y);
+            line = words[i];
+            y += 36;
+          } else {
+            line = testLine;
+          }
+        }
+        ctx.fillText(line, w / 2, y);
+
+        // QR code
+        const qrY = h - 280;
+        if (typeof kjua !== 'undefined') {
+          const qr = kjua({
+            text: window.location.href,
+            size: 180,
+            fill: '#2D2D2D',
+            back: '#F7F5F0',
+            rounded: 8,
+          });
+          ctx.drawImage(qr, (w - 180) / 2, qrY);
+        } else {
+          ctx.strokeStyle = '#E0DCD4';
+          ctx.lineWidth = 2;
+          ctx.strokeRect((w - 180) / 2, qrY, 180, 180);
+          ctx.fillStyle = '#6B6B6B';
+          ctx.font = '16px sans-serif';
+          ctx.fillText('二维码', w / 2, qrY + 95);
+        }
+
+        // QR label
+        ctx.fillStyle = '#6B6B6B';
+        ctx.font = '22px -apple-system, PingFang SC, Microsoft YaHei, sans-serif';
+        ctx.fillText('扫码测测你是什么儿童', w / 2, qrY + 220);
+
+        // Footer
+        ctx.fillStyle = '#999';
+        ctx.font = '16px -apple-system, PingFang SC, Microsoft YaHei, sans-serif';
+        ctx.fillText('kidti.pages.dev', w / 2, h - 50);
+      },
+
+      generatePoster() {
+        const canvas = document.getElementById('poster-canvas');
+        const ctx = canvas.getContext('2d');
+        const p = PERSONAS[state.personaCode] || PERSONAS['KPBL'];
+        const w = 750;
+        const h = 1334;
+
+        // Draw base content first
+        this.drawPosterBase(ctx, p, w, h);
+
+        // Try to load persona image independently
+        const imageCode = state.personaCode.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const imgPath = './assets/personas/persona-' + imageCode + '.webp';
+        const posterImg = new Image();
+        posterImg.onload = () => {
+          const imgSize = 320;
+          const imgX = (w - imgSize) / 2;
+          const imgY = 150;
+          ctx.save();
+          ctx.beginPath();
+          ctx.roundRect(imgX, imgY, imgSize, imgSize, 16);
+          ctx.clip();
+          ctx.drawImage(posterImg, imgX, imgY, imgSize, imgSize);
+          ctx.restore();
+          console.log('[KidTI] 海报图片加载成功:', imgPath);
+        };
+        posterImg.onerror = () => {
+          // Fallback: draw emoji
+          ctx.font = '120px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('🎭', w / 2, 340);
+          console.error('[KidTI] 海报图片加载失败:', imgPath);
+        };
+        posterImg.src = imgPath;
+      },
+
+      showPoster() {
+        document.getElementById('poster-modal').classList.remove('hidden');
+        this.generatePoster();
+      },
+
+      closePoster() {
+        document.getElementById('poster-modal').classList.add('hidden');
+      },
+
+      savePoster() {
+        const canvas = document.getElementById('poster-canvas');
+        canvas.toBlob((blob) => {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = "kidti-" + state.personaCode + ".png";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }, 'image/png');
+      },
+
+      shareResult() {
+        // Show poster modal first
+        this.showPoster();
+        
+        // Also try native share
+        const url = window.location.href;
+        const text = `我在儿童TI测出了「${state.personaCode}」——${PERSONAS[state.personaCode]?.name || ''}。你是什么儿童？`;
+        const shareData = {
+          title: '儿童TI — 你是什么儿童？',
+          text: text,
+          url: url,
+        };
+        if (navigator.share) {
+          navigator.share(shareData).catch(() => {});
+        } else if (navigator.clipboard) {
+          navigator.clipboard.writeText(`${text}\n${url}`).then(() => {
+            alert('结果链接已复制到剪贴板');
+          }).catch(() => {
+            prompt('复制以下链接分享给朋友：', url);
+          });
+        } else {
+          prompt('复制以下链接分享给朋友：', url);
+        }
+      },
+
+      restart() {
+        state.currentQuestion = 0;
+        state.answers = [];
+        state.scores = { NRG: 0, RUL: 0, PRE: 0, EMO: 0 };
+        state.d4Scores = [];
+        state.personaCode = null;
+        switchView('start');
+      },
+    };
+
+    // 启动
+    document.addEventListener('DOMContentLoaded', () => app.init());
+  </script>
+  
+</body>
+</html>
