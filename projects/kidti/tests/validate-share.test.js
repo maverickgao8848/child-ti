@@ -44,6 +44,12 @@ assert(html.includes('toBlob'), "使用 canvas.toBlob");
 assert(html.includes('kjua'), "引入 kjua 二维码库");
 
 // ===== 4. 海报尺寸检查 =====
+assert(html.includes('<script src="./kjua.min.js"></script>'), "src page loads kjua");
+assert(html.includes('renderInlineQRCode'), "result page renders inline QR");
+assert(html.includes("render: 'canvas'"), "QR uses canvas rendering");
+assert(!html.includes('navigator.share(shareData)'), "share button does not trigger blocking native share/copy");
+assert(html.includes('document.body.appendChild(modal)'), "poster modal is moved outside scroll container");
+
 const canvasMatch = html.match(/id="poster-canvas"[^>]*width="(\d+)"[^>]*height="(\d+)"/);
 if (canvasMatch) {
   const w = parseInt(canvasMatch[1]);

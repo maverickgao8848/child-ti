@@ -11,6 +11,12 @@ const OUT_HTML = path.join(__dirname, '../deploy/index.html');
 
 let html = fs.readFileSync(SRC_HTML, 'utf-8');
 
+const kjuaJs = fs.readFileSync(path.join(__dirname, '../src/ui/kjua.min.js'), 'utf-8');
+html = html.replace(
+  '<script src="./kjua.min.js"></script>',
+  '<script>' + kjuaJs + '</script>'
+);
+
 // 内联 questions.js
 const questionsJs = fs.readFileSync(path.join(__dirname, '../src/config/questions.js'), 'utf-8');
 html = html.replace(

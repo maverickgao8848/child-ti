@@ -807,6 +807,13 @@
       margin-bottom: 24px;
     }
 
+    .qr-placeholder canvas,
+    .qr-placeholder img {
+      display: block;
+      width: 104px;
+      height: 104px;
+    }
+
 
     /* ===== Poster Modal ===== */
     .poster-modal {
@@ -1009,6 +1016,7 @@
   </div>
 
   <!-- Config layers -->
+  <script src="./kjua.min.js"></script>
   <script src="../config/questions.js"></script>
   <script src="../config/scoring.js"></script>
   <script src="../config/personas.js"></script>
@@ -1457,12 +1465,36 @@
         url.searchParams.set("view", "result");
         url.searchParams.set("code", state.personaCode);
         window.history.replaceState(null, "", url.toString());
+        this.renderInlineQRCode();
       },
 
 
 
 
       // ===== Poster / Share Methods =====
+
+      renderInlineQRCode() {
+        const qrContainer = document.getElementById('qr-placeholder');
+        if (!qrContainer) return;
+
+        qrContainer.innerHTML = '';
+        if (typeof kjua === 'undefined') {
+          qrContainer.textContent = '二维码';
+          return;
+        }
+
+        const qr = kjua({
+          render: 'canvas',
+          text: window.location.href,
+          size: 104,
+          fill: '#2D2D2D',
+          back: '#F0EBE3',
+          rounded: 0,
+          quiet: 1,
+        });
+        qr.setAttribute('aria-label', '结果页二维码');
+        qrContainer.appendChild(qr);
+      },
 
       copyLink() {
         const url = window.location.href;
@@ -1539,6 +1571,7 @@
         const qrY = h - 280;
         if (typeof kjua !== 'undefined') {
           const qr = kjua({
+            render: 'canvas',
             text: window.location.href,
             size: 180,
             fill: '#2D2D2D',
@@ -1603,12 +1636,18 @@
       },
 
       showPoster() {
-        document.getElementById('poster-modal').classList.remove('hidden');
+        const modal = document.getElementById('poster-modal');
+        if (modal.parentElement !== document.body) {
+          document.body.appendChild(modal);
+        }
+        document.body.style.overflow = 'hidden';
+        modal.classList.remove('hidden');
         this.generatePoster();
       },
 
       closePoster() {
         document.getElementById('poster-modal').classList.add('hidden');
+        document.body.style.overflow = '';
       },
 
       savePoster() {
@@ -1626,28 +1665,7 @@
       },
 
       shareResult() {
-        // Show poster modal first
         this.showPoster();
-        
-        // Also try native share
-        const url = window.location.href;
-        const text = `我在儿童TI测出了「${state.personaCode}」——${PERSONAS[state.personaCode]?.name || ''}。你是什么儿童？`;
-        const shareData = {
-          title: '儿童TI — 你是什么儿童？',
-          text: text,
-          url: url,
-        };
-        if (navigator.share) {
-          navigator.share(shareData).catch(() => {});
-        } else if (navigator.clipboard) {
-          navigator.clipboard.writeText(`${text}\n${url}`).then(() => {
-            alert('结果链接已复制到剪贴板');
-          }).catch(() => {
-            prompt('复制以下链接分享给朋友：', url);
-          });
-        } else {
-          prompt('复制以下链接分享给朋友：', url);
-        }
       },
 
       restart() {
