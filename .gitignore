@@ -25,3 +25,24 @@ build/
 !.dev.vars.example
 .env*
 !.env.example
+
+# Agent / IDE local configs
+.agents/
+.claude/
+
+# Project docs (local development only)
+docs/
+
+# Root-level duplicate files (source of truth is in projects/kidti/)
+/assets/
+/scripts/
+index.html
+personas.js
+questions.js
+scoring.js
+user-guide.md
+AGENTS.md
+CLAUDE.md
+skills-lock.json
+wrangler.jsonc
+kidti-resource-inventory-*.md
