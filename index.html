@@ -1,0 +1,3175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>儿童TI — 你是什么儿童？</title>
+  <meta name="description" content="24道题测出你的童年人格。纯属娱乐，无心理学背书，结果仅供参考，不构成育儿建议。">
+  
+  <!-- OG / Twitter Cards -->
+  <meta property="og:title" content="儿童TI — 你是什么儿童？">
+  <meta property="og:description" content="24道题测出你的童年人格。纯属娱乐，无心理学背书。">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/og-share-square.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="assets/og-share-square.png">
+
+  <style>
+    /* ===== CSS Variables ===== */
+    :root {
+      --bg: #F7F5F0;
+      --bg-warm: #F0EBE3;
+      --text: #2D2D2D;
+      --text-secondary: #6B6B6B;
+      --accent: #FF6B6B;
+      --accent-warm: #FFB347;
+      --accent-cool: #4ECDC4;
+      --border: #E0DCD4;
+      --card: #FFFFFF;
+      --shadow: 0 4px 20px rgba(0,0,0,0.08);
+      --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --safe-top: env(safe-area-inset-top);
+      --safe-bottom: env(safe-area-inset-bottom);
+    }
+
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== View System ===== */
+    .view {
+      position: fixed;
+      inset: 0;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      opacity: 1;
+      transform: translateX(0);
+      transition: opacity 180ms ease, transform 180ms ease;
+      padding: var(--safe-top) 20px calc(20px + var(--safe-bottom));
+    }
+
+    .view.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(20px);
+      z-index: -1;
+    }
+
+    /* ===== Start Page ===== */
+    #view-start {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: linear-gradient(180deg, var(--bg) 0%, var(--bg-warm) 100%);
+    }
+
+    .start-brand {
+      margin-bottom: 24px;
+    }
+
+    .start-brand h1 {
+      font-size: 48px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      color: var(--text);
+      line-height: 1.1;
+    }
+
+    .start-brand .subtitle {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-top: 8px;
+    }
+
+    .start-info {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-bottom: 40px;
+      max-width: 280px;
+    }
+
+    .start-info .highlight {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 240px;
+      height: 56px;
+      border: none;
+      border-radius: 28px;
+      background: linear-gradient(135deg, var(--accent) 0%, #FF8E8E 100%);
+      color: #fff;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: transform 120ms ease, box-shadow 120ms ease;
+      -webkit-appearance: none;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.97);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .start-footer {
+      position: absolute;
+      bottom: calc(24px + var(--safe-bottom));
+      font-size: 12px;
+      color: var(--text-secondary);
+      opacity: 0.7;
+      max-width: 320px;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* ===== Quiz Page ===== */
+    #view-quiz {
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .quiz-header {
+      padding-top: 12px;
+      margin-bottom: 20px;
+      flex-shrink: 0;
+    }
+
+    .quiz-header .brand-mini {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .progress-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      white-space: nowrap;
+      min-width: 90px;
+    }
+
+    .progress-track {
+      flex: 1;
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-cool), var(--accent-warm));
+      border-radius: 3px;
+      transition: width 250ms ease;
+      width: 0%;
+    }
+
+    .quiz-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding-top: 16px;
+    }
+
+    .question-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .question-text {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.5;
+      color: var(--text);
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-btn {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      width: 100%;
+      padding: 16px 18px;
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 120ms ease, background 120ms ease, transform 80ms ease;
+      -webkit-appearance: none;
+    }
+
+    .option-btn:active {
+      transform: scale(0.99);
+    }
+
+    .option-btn.selected {
+      border-color: var(--accent-cool);
+      background: rgba(78, 205, 196, 0.08);
+    }
+
+    .option-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--bg-warm);
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .option-btn.selected .option-label {
+      background: var(--accent-cool);
+      color: #fff;
+    }
+
+    .option-text {
+      font-size: 16px;
+      color: var(--text);
+      line-height: 1.5;
+      padding-top: 2px;
+    }
+
+    .quiz-footer {
+      padding: 16px 0 8px;
+      flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 28px;
+      border: 1.5px solid var(--border);
+      border-radius: 24px;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 120ms ease;
+      -webkit-appearance: none;
+    }
+
+    .btn-secondary:active {
+      background: var(--bg-warm);
+    }
+
+    .btn-secondary.hidden {
+      display: none;
+    }
+
+    /* ===== Result Page ===== */
+    #view-result {
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .result-brand {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-top: 8px;
+      margin-bottom: 16px;
+    }
+
+    .result-card {
+      width: 100%;
+      max-width: 400px;
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .result-image-placeholder {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      min-height: 280px;
+      background: linear-gradient(135deg, var(--bg-warm) 0%, #E8E4DC 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--text-secondary);
+      position: relative;
+    }
+
+    .result-image-placeholder .placeholder-icon {
+      font-size: 64px;
+      opacity: 0.4;
+    }
+
+    .result-content {
+      padding: 24px;
+      text-align: center;
+    }
+
+    .result-code {
+      font-size: 42px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .result-name {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .result-tagline {
+      font-size: 15px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .result-slogan {
+      font-size: 14px;
+      color: var(--text);
+      font-style: italic;
+      padding: 12px 16px;
+      background: var(--bg-warm);
+      border-radius: var(--radius-sm);
+      line-height: 1.6;
+    }
+
+    /* Dimension Bars */
+    .dimensions-section {
+      width: 100%;
+      max-width: 400px;
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px 24px;
+      margin-bottom: 20px;
+    }
+
+    .dimensions-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .dim-item {
+      margin-bottom: 16px;
+    }
+
+    .dim-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .dim-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .dim-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .dim-value {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .dim-bar-track {
+      height: 8px;
+      background: var(--bg-warm);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .dim-bar-track::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+      z-index: 2;
+    }
+
+    .dim-bar-fill {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      border-radius: 4px;
+      transition: left 600ms ease, width 600ms ease;
+      min-width: 0;
+    }
+
+    .dim-bar-fill.nrg { background: linear-gradient(90deg, #FF6B6B, #FFB347); }
+    .dim-bar-fill.rul { background: linear-gradient(90deg, #4ECDC4, #44A08D); }
+    .dim-bar-fill.pre { background: linear-gradient(90deg, #667EEA, #764BA2); }
+    .dim-bar-fill.emo { background: linear-gradient(90deg, #F093FB, #F5576C); }
+
+    .result-description {
+      margin-top: 16px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      text-align: left;
+    }
+
+    .result-description p {
+      margin-bottom: 10px;
+    }
+
+    .result-description p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ===== Personality Reading (MBTI-style) ===== */
+    /* ===== Diagnosis Book (v2.0) ===== */
+    .diagnosis-book {
+      width: 100%;
+      max-width: 400px;
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px 24px;
+      margin-bottom: 20px;
+    }
+
+    .diagnosis-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--bg-warm);
+    }
+
+    .diagnosis-icon {
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .diagnosis-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: 0.5px;
+    }
+
+    .diagnosis-subtitle {
+      font-size: 11px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      margin-left: auto;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .diag-section {
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px dashed var(--border);
+    }
+
+    .diag-section:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .diag-section-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .diag-section-title .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .diag-body {
+      font-size: 14px;
+      line-height: 1.85;
+      color: var(--text);
+      text-align: left;
+    }
+
+    .diag-body p {
+      margin-bottom: 10px;
+    }
+
+    .diag-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Component breakdown */
+    .comp-item {
+      margin-bottom: 14px;
+      padding-left: 12px;
+      border-left: 3px solid var(--border);
+    }
+
+    .comp-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .comp-item.nrg { border-left-color: #FF6B6B; }
+    .comp-item.rul { border-left-color: #4ECDC4; }
+    .comp-item.pre { border-left-color: #667EEA; }
+    .comp-item.emo { border-left-color: #F5576C; }
+
+    .comp-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .comp-text {
+      font-size: 13px;
+      line-height: 1.75;
+      color: var(--text);
+    }
+
+    /* Scenario scripts */
+    .scenario-item {
+      margin-bottom: 14px;
+      padding: 10px 12px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+    }
+
+    .scenario-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .scenario-icon {
+      font-size: 16px;
+      margin-right: 4px;
+    }
+
+    .scenario-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .scenario-text {
+      font-size: 13px;
+      line-height: 1.75;
+      color: var(--text);
+    }
+
+    /* Relations */
+    .relations-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .relation-card {
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+    }
+
+    .relation-card.best { background: rgba(78, 205, 196, 0.08); border: 1px solid rgba(78, 205, 196, 0.2); }
+    .relation-card.worst { background: rgba(255, 107, 107, 0.06); border: 1px solid rgba(255, 107, 107, 0.15); }
+    .relation-card.mystery { background: rgba(102, 126, 234, 0.06); border: 1px solid rgba(102, 126, 234, 0.15); }
+
+    .relation-tag {
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .relation-tag.best { color: #44A08D; }
+    .relation-tag.worst { color: #FF6B6B; }
+    .relation-tag.mystery { color: #667EEA; }
+
+    .relation-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .relation-reason {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Prophecy */
+    .prophecy-box {
+      padding: 14px 16px;
+      background: linear-gradient(135deg, var(--bg-warm) 0%, #F0EBE3 100%);
+      border-radius: var(--radius-sm);
+      border-left: 3px solid var(--accent-warm);
+    }
+
+    .prophecy-text {
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--text);
+      font-style: italic;
+    }
+
+    .dim-poles {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 4px;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    /* Action Buttons */
+    .result-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 20px;
+    }
+
+    .btn-share {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 52px;
+      border: none;
+      border-radius: 26px;
+      background: linear-gradient(135deg, var(--accent-cool) 0%, #44A08D 100%);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: transform 120ms ease;
+      -webkit-appearance: none;
+    }
+
+    .btn-share:active {
+      transform: scale(0.97);
+    }
+
+    .btn-retry {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 48px;
+      border: 1.5px solid var(--border);
+      border-radius: 24px;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 120ms ease;
+      -webkit-appearance: none;
+    }
+
+    .btn-retry:active {
+      background: var(--bg-warm);
+    }
+
+    .qr-placeholder {
+      width: 120px;
+      height: 120px;
+      background: var(--bg-warm);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
+
+    /* ===== Poster Modal ===== */
+    .poster-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+      transition: opacity 200ms ease;
+    }
+    .poster-modal.hidden {
+      opacity: 0;
+      pointer-events: none;
+      z-index: -1;
+    }
+    .poster-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+    }
+    .poster-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 20px;
+      max-width: 90vw;
+    }
+    #poster-canvas {
+      max-width: 100%;
+      max-height: 70vh;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .poster-actions {
+      display: flex;
+      gap: 12px;
+    }
+    .poster-actions .btn-primary,
+    .poster-actions .btn-secondary {
+      padding: 12px 28px;
+      font-size: 15px;
+    }
+
+    /* ===== Responsive ===== */
+    @media (min-width: 768px) {
+      .view {
+        padding-left: 40px;
+        padding-right: 40px;
+      }
+    }
+
+    /* ===== Reduced Motion ===== */
+    @media (prefers-reduced-motion: reduce) {
+      .view, .progress-fill, .dim-bar-fill, .option-btn, .btn-primary, .btn-share, .btn-retry, .btn-secondary {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== Start Page ========== -->
+  <div id="view-start" class="view">
+    <div class="start-brand">
+      <h1>儿童 TI</h1>
+      <div class="subtitle">你是什么儿童？</div>
+    </div>
+    <div class="start-info">
+      <span class="highlight">24 道题</span>，测出你的童年人格<br>
+      3-5 分钟 · 纯属娱乐
+    </div>
+    <button class="btn-primary" id="btn-start" onclick="app.startQuiz()">开始测试</button>
+    <div class="start-footer">
+      本测试纯属娱乐，无心理学专业背书。<br>
+      结果仅供参考，不构成任何育儿或医疗建议。
+    </div>
+  </div>
+
+  <!-- ========== Quiz Page ========== -->
+  <div id="view-quiz" class="view hidden">
+    <div class="quiz-header">
+      <div class="brand-mini">儿童 TI</div>
+      <div class="progress-wrap">
+        <div class="progress-text" id="progress-text">第 1 题 / 共 24 题</div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+    </div>
+    <div class="quiz-body">
+      <div class="question-card">
+        <div class="question-text" id="question-text">题目加载中…</div>
+      </div>
+      <div class="options-list" id="options-list"></div>
+    </div>
+    <div class="quiz-footer">
+      <button class="btn-secondary hidden" id="btn-prev" onclick="app.goPrev()">上一题</button>
+    </div>
+  </div>
+
+  <!-- ========== Result Page ========== -->
+  <div id="view-result" class="view hidden">
+    <div class="result-brand">儿童 TI</div>
+    <div class="result-card">
+      <div class="result-image-placeholder">
+        <img id="result-img" alt="" style="display:none;width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';document.getElementById('result-img-fallback').style.display='flex';">
+        <span class="placeholder-icon" id="result-img-fallback">🎭</span>
+      </div>
+      <div class="result-content">
+        <div class="result-code" id="result-code">----</div>
+        <div class="result-name" id="result-name">--</div>
+        <div class="result-tagline" id="result-tagline">--</div>
+        <div class="result-slogan" id="result-slogan">--</div>
+        <div class="result-description" id="result-description"></div>
+      </div>
+    </div>
+    <div class="dimensions-section">
+      <div class="dimensions-title">你的童年人格维度</div>
+      <div id="dimensions-list"></div>
+    </div>
+
+    <!-- ========== Diagnosis Book (v2.0) ========== -->
+    <div class="diagnosis-book" id="diagnosis-book">
+      <div class="diagnosis-header">
+        <span class="diagnosis-icon">🧠</span>
+        <span class="diagnosis-title">人格诊断书</span>
+        <span class="diagnosis-subtitle">KidTI Analysis</span>
+      </div>
+
+      <!-- 核心画像 -->
+      <div class="diag-section" id="diag-portrait">
+        <div class="diag-section-title"><span class="dot"></span>核心画像</div>
+        <div class="diag-body" id="diag-portrait-body"></div>
+      </div>
+
+      <!-- 人格成分解析 -->
+      <div class="diag-section" id="diag-components">
+        <div class="diag-section-title"><span class="dot"></span>人格成分解析</div>
+        <div id="diag-components-body"></div>
+      </div>
+
+      <!-- 情境剧本 -->
+      <div class="diag-section" id="diag-scenarios">
+        <div class="diag-section-title"><span class="dot"></span>情境剧本</div>
+        <div id="diag-scenarios-body"></div>
+      </div>
+
+      <!-- 隐藏档案 -->
+      <div class="diag-section" id="diag-hidden">
+        <div class="diag-section-title"><span class="dot"></span>隐藏档案</div>
+        <div class="diag-body" id="diag-hidden-body"></div>
+      </div>
+
+      <!-- 人格关系谱 -->
+      <div class="diag-section" id="diag-relations">
+        <div class="diag-section-title"><span class="dot"></span>人格关系谱</div>
+        <div class="relations-grid" id="diag-relations-body"></div>
+      </div>
+
+      <!-- 成长预言 -->
+      <div class="diag-section" id="diag-prophecy">
+        <div class="diag-section-title"><span class="dot"></span>成长预言</div>
+        <div class="prophecy-box">
+          <div class="prophecy-text" id="diag-prophecy-body"></div>
+        </div>
+      </div>
+    </div>
+    
+  <!-- Poster Modal -->
+  <div id="poster-modal" class="poster-modal hidden">
+    <div class="poster-overlay" onclick="app.closePoster()"></div>
+    <div class="poster-content">
+      <canvas id="poster-canvas" width="750" height="1334"></canvas>
+      <div class="poster-actions">
+        <button class="btn-primary" id="btn-save-poster" onclick="app.savePoster()">保存图片</button>
+        <button class="btn-secondary" onclick="app.closePoster()">关闭</button>
+      </div>
+    </div>
+  </div>
+  <div class="result-actions">
+      <button class="btn-share" id="btn-share" onclick="app.shareResult()">分享给朋友</button>
+      <button class="btn-secondary" id="btn-copy" onclick="app.copyLink()">复制链接</button>
+      <button class="btn-retry" id="btn-retry" onclick="app.restart()">重新测试</button>
+    </div>
+    <div class="qr-placeholder" id="qr-placeholder">二维码</div>
+  </div>
+
+  <!-- Config layers -->
+  <script>/**
+ * KidTI 24 道童年情境选择题数据
+ * 每维度 6 题：D1(NRG) 能量源 / D2(RUL) 规则观 / D3(PRE) 存在感 / D4(EMO) 情绪天气
+ *
+ * 计分规则：
+ * - D1(NRG): 高分 → BATTERY(充电型), 低分 → REACTOR(放电型)
+ * - D2(RUL): 高分 → SHEEP(顺毛型),   低分 → WOLF(反骨型)
+ * - D3(PRE): 高分 → BLACKHOLE(黑洞型), 低分 → SPOTLIGHT(聚光型)
+ * - D4(EMO): 方差大 → FOG(迷雾型), 均值偏高 → STORM(暴雨型), 均值偏低 → LAKE(静海型)
+ */
+
+const QUESTIONS = [
+  // ==================== D1 能量源 NRG（6题）====================
+  {
+    id: 1,
+    dimension: "NRG",
+    text: "周末下午，爸妈出门了你一个人在家，你会？",
+    options: [
+      { label: "A", text: "终于清净了，把门反锁开始看漫画", scores: { NRG: 2 } },
+      { label: "B", text: "先给好朋友打电话问要不要过来玩", scores: { NRG: -1, PRE: -1 } },
+      { label: "C", text: "打开电脑同时开五个聊天窗口", scores: { NRG: -2 } },
+      { label: "D", text: "坐在沙发上发呆，享受这片刻", scores: { NRG: 1, PRE: 1 } },
+    ],
+  },
+  {
+    id: 2,
+    dimension: "NRG",
+    text: "学校组织春游，大巴车上你通常会？",
+    options: [
+      { label: "A", text: "默默戴耳机看窗外，谁也别跟我说话", scores: { NRG: 2, PRE: 1 } },
+      { label: "B", text: "从前排串到后排，跟每个人聊天", scores: { NRG: -2, PRE: -1 } },
+      { label: "C", text: "跟旁边同学聊几句，然后各自安静", scores: { NRG: 1 } },
+      { label: "D", text: "组织大家一起唱歌玩游戏", scores: { NRG: -2, PRE: -1 } },
+    ],
+  },
+  {
+    id: 3,
+    dimension: "NRG",
+    text: "期末考试结束，放学后你第一件事是？",
+    options: [
+      { label: "A", text: "直接回家，手机静音，谁都找不到", scores: { NRG: 2 } },
+      { label: "B", text: "约同学去网吧/商场玩到半夜", scores: { NRG: -2 } },
+      { label: "C", text: "先回家睡一觉，晚上再回消息", scores: { NRG: 1 } },
+      { label: "D", text: "班群里疯狂刷屏对答案", scores: { NRG: -2, PRE: -1 } },
+    ],
+  },
+  {
+    id: 4,
+    dimension: "NRG",
+    text: "课间十分钟，你通常怎么过？",
+    options: [
+      { label: "A", text: "趴在桌上补觉或发呆", scores: { NRG: 2, PRE: 1 } },
+      { label: "B", text: "冲出教室在走廊上打闹", scores: { NRG: -2 } },
+      { label: "C", text: "去隔壁班找人聊天", scores: { NRG: -1 } },
+      { label: "D", text: "在座位上看课外书", scores: { NRG: 1, RUL: 1 } },
+    ],
+  },
+  {
+    id: 5,
+    dimension: "NRG",
+    text: "亲戚来家里吃饭，饭桌上你被cue到，你会？",
+    options: [
+      { label: "A", text: "快速吃完躲进房间", scores: { NRG: 2, PRE: 1 } },
+      { label: "B", text: "表演刚学的才艺给大家看", scores: { NRG: -2, PRE: -1 } },
+      { label: "C", text: "被问成绩时敷衍几句", scores: { NRG: 1 } },
+      { label: "D", text: "主动给大家倒饮料、调节气氛", scores: { NRG: -1, PRE: -1 } },
+    ],
+  },
+  {
+    id: 6,
+    dimension: "NRG",
+    text: "暑假第一天，你的计划是？",
+    options: [
+      { label: "A", text: "不出门，把攒了一学期的剧看完", scores: { NRG: 2, PRE: 1 } },
+      { label: "B", text: "列一张每天约不同朋友的表", scores: { NRG: -2, PRE: -1 } },
+      { label: "C", text: "报三个夏令营一个都不落", scores: { NRG: -2 } },
+      { label: "D", text: "偶尔出门，大部分时间宅着", scores: { NRG: 1 } },
+    ],
+  },
+
+  // ==================== D2 规则观 RUL（6题）====================
+  {
+    id: 7,
+    dimension: "RUL",
+    text: "老师布置的作业明显过量，今晚根本写不完，你会？",
+    options: [
+      { label: "A", text: "熬夜也要全部写完，不写睡不着", scores: { RUL: 2, NRG: 1 } },
+      { label: "B", text: "写一半，剩下的抄同桌的", scores: { RUL: -1 } },
+      { label: "C", text: "直接不写，反正法不责众", scores: { RUL: -2 } },
+      { label: "D", text: "挑重点写，剩下的糊弄过去", scores: { RUL: -1, NRG: 1 } },
+    ],
+  },
+  {
+    id: 8,
+    dimension: "RUL",
+    text: "考试时发现隔壁同学在作弊，你会？",
+    options: [
+      { label: "A", text: "假装没看见，低头写自己的", scores: { RUL: 1, PRE: 1 } },
+      { label: "B", text: "举手报告老师", scores: { RUL: 2, PRE: -1 } },
+      { label: "C", text: "考完后跟关系好的吐槽", scores: { RUL: -1, NRG: -1 } },
+      { label: "D", text: "趁老师不注意也偷看一眼", scores: { RUL: -2, PRE: -1 } },
+    ],
+  },
+  {
+    id: 9,
+    dimension: "RUL",
+    text: "班长在自习课记名字，你刚好在讲话，你会？",
+    options: [
+      { label: "A", text: "立刻闭嘴，之后找班长求情别记", scores: { RUL: 2, PRE: 1 } },
+      { label: "B", text: "继续讲，反正记了就记了", scores: { RUL: -2 } },
+      { label: "C", text: "等班长走过来再停", scores: { RUL: -1 } },
+      { label: "D", text: "反将一军：\"你凭什么只记我不记他\"", scores: { RUL: -2, PRE: -1 } },
+    ],
+  },
+  {
+    id: 10,
+    dimension: "RUL",
+    text: "学校要求统一穿校服，你的态度是？",
+    options: [
+      { label: "A", text: "每天都穿，甚至周末也穿", scores: { RUL: 2, PRE: 1 } },
+      { label: "B", text: "在校服里面穿自己的T恤，拉链拉开", scores: { RUL: -1 } },
+      { label: "C", text: "偷偷改短校裤裤脚", scores: { RUL: -2 } },
+      { label: "D", text: "穿校服但配一双限量球鞋", scores: { RUL: -1, PRE: -1 } },
+    ],
+  },
+  {
+    id: 11,
+    dimension: "RUL",
+    text: "爸妈说\"隔壁小明考了第一\"，你的第一反应是？",
+    options: [
+      { label: "A", text: "默默发誓下次超过他", scores: { RUL: 2, NRG: 1 } },
+      { label: "B", text: "心想\"小明关我屁事\"", scores: { RUL: -2, NRG: 1 } },
+      { label: "C", text: "说\"那让小明当你儿子啊\"", scores: { RUL: -2, PRE: -1 } },
+      { label: "D", text: "表面附和，背后觉得小明很惨", scores: { RUL: 1, NRG: 1 } },
+    ],
+  },
+  {
+    id: 12,
+    dimension: "RUL",
+    text: "班上选班干部，老师直接内定了名单，你会？",
+    options: [
+      { label: "A", text: "接受结果，服从安排", scores: { RUL: 2, PRE: 1 } },
+      { label: "B", text: "私下跟同学抱怨", scores: { RUL: -1, NRG: -1 } },
+      { label: "C", text: "当堂举手问\"为什么不投票\"", scores: { RUL: -2, PRE: -1 } },
+      { label: "D", text: "拉拢同学准备下次选举", scores: { RUL: -2, NRG: -1 } },
+    ],
+  },
+
+  // ==================== D3 存在感 PRE（6题）====================
+  {
+    id: 13,
+    dimension: "PRE",
+    text: "文艺汇演，班主任突然让你上台表演，你会？",
+    options: [
+      { label: "A", text: "疯狂摆手说\"我不行我不行\"", scores: { PRE: 2, NRG: 1 } },
+      { label: "B", text: "表面推脱，心里暗爽", scores: { PRE: -1, NRG: -1 } },
+      { label: "C", text: "一口答应，连夜准备节目", scores: { PRE: -2, NRG: -1 } },
+      { label: "D", text: "推荐其他同学，自己躲幕后", scores: { PRE: 2, RUL: 1 } },
+    ],
+  },
+  {
+    id: 14,
+    dimension: "PRE",
+    text: "小组讨论时，你通常扮演什么角色？",
+    options: [
+      { label: "A", text: "基本不说话，最后附和大家", scores: { PRE: 2, NRG: 1 } },
+      { label: "B", text: "主导讨论，分配任务", scores: { PRE: -2, RUL: 1 } },
+      { label: "C", text: "偶尔插一句，说完又沉默", scores: { PRE: 1, NRG: 1 } },
+      { label: "D", text: "提出反对意见，引发辩论", scores: { PRE: -2, RUL: -1 } },
+    ],
+  },
+  {
+    id: 15,
+    dimension: "PRE",
+    text: "课堂上老师提问，你刚好知道答案，你会？",
+    options: [
+      { label: "A", text: "把头埋低，默念\"别叫我别叫我\"", scores: { PRE: 2, NRG: 1 } },
+      { label: "B", text: "手举得比谁都高", scores: { PRE: -2, NRG: -1 } },
+      { label: "C", text: "老师点到才站起来回答", scores: { PRE: 1 } },
+      { label: "D", text: "故意不举手，但小声嘟囔答案", scores: { PRE: -1, RUL: -1 } },
+    ],
+  },
+  {
+    id: 16,
+    dimension: "PRE",
+    text: "班级合影，你会 instinctively 站在？",
+    options: [
+      { label: "A", text: "最边上，最好能被前面的人挡住", scores: { PRE: 2, NRG: 1 } },
+      { label: "B", text: "正中间C位", scores: { PRE: -2, NRG: -1 } },
+      { label: "C", text: "第二排中间偏左，不显眼", scores: { PRE: 1 } },
+      { label: "D", text: "第一排蹲下，比个夸张的手势", scores: { PRE: -2, RUL: -1 } },
+    ],
+  },
+  {
+    id: 17,
+    dimension: "PRE",
+    text: "朋友圈（或当年的QQ空间）发了照片，半天没人点赞，你会？",
+    options: [
+      { label: "A", text: "秒删，假装没发过", scores: { PRE: 2, EMO: 1 } },
+      { label: "B", text: "无所谓，反正给自己看的", scores: { PRE: 1, NRG: 1 } },
+      { label: "C", text: "私聊几个朋友\"去看看我新发的那条\"", scores: { PRE: -2, NRG: -1 } },
+      { label: "D", text: "再发一条\"看来大家都很忙\"", scores: { PRE: -2, EMO: 1 } },
+    ],
+  },
+  {
+    id: 18,
+    dimension: "PRE",
+    text: "班级元旦晚会，你会怎么参与？",
+    options: [
+      { label: "A", text: "坐在角落吃东西，希望晚会快点结束", scores: { PRE: 2, NRG: 1 } },
+      { label: "B", text: "报名当主持人", scores: { PRE: -2, NRG: -1 } },
+      { label: "C", text: "参与一个集体节目，不突出", scores: { PRE: 1, RUL: 1 } },
+      { label: "D", text: "串场讲段子，全场焦点", scores: { PRE: -2, RUL: -1 } },
+    ],
+  },
+
+  // ==================== D4 情绪天气 EMO（6题）====================
+  {
+    id: 19,
+    dimension: "EMO",
+    text: "被爸妈当众骂了一顿，你的即时反应是？",
+    options: [
+      { label: "A", text: "当场大哭，所有人都能看见", scores: { EMO: 2, PRE: -1 } },
+      { label: "B", text: "面无表情，晚上躲在被子里哭", scores: { EMO: -2, NRG: 1 } },
+      { label: "C", text: "笑着跟邻居阿姨说\"我妈又生气了\"", scores: { EMO: -2, PRE: -1 } },
+      { label: "D", text: "眼泪在眼眶里打转但硬憋回去", scores: { EMO: 1, PRE: 1 } },
+    ],
+  },
+  {
+    id: 20,
+    dimension: "EMO",
+    text: "最好的朋友突然不理你了，你会？",
+    options: [
+      { label: "A", text: "当场拉着他质问，声音大到全班听见", scores: { EMO: 2, PRE: -1 } },
+      { label: "B", text: "写小纸条问他\"为什么\"", scores: { EMO: 1 } },
+      { label: "C", text: "假装不在意，回家在被子里想了一晚上", scores: { EMO: -2, NRG: 1 } },
+      { label: "D", text: "冷静分析是不是自己哪里得罪他了", scores: { EMO: -2, NRG: 1 } },
+    ],
+  },
+  {
+    id: 21,
+    dimension: "EMO",
+    text: "考试考砸了，回到家你？",
+    options: [
+      { label: "A", text: "一进门就趴桌上嚎啕大哭", scores: { EMO: 2 } },
+      { label: "B", text: "默默把卷子藏进抽屉最深处", scores: { EMO: -2, PRE: 1 } },
+      { label: "C", text: "主动给爸妈看，但内心毫无波澜", scores: { EMO: -2, RUL: 1 } },
+      { label: "D", text: "愤怒地把卷子撕碎", scores: { EMO: 2, RUL: -1 } },
+    ],
+  },
+  {
+    id: 22,
+    dimension: "EMO",
+    text: "被同学起了难听的外号当众嘲笑，你？",
+    options: [
+      { label: "A", text: "当场跟他打起来", scores: { EMO: 2, RUL: -1 } },
+      { label: "B", text: "笑着自嘲\"对啊我就是\"", scores: { EMO: -2, PRE: -1 } },
+      { label: "C", text: "回家告诉爸妈，边哭边说", scores: { EMO: 2, RUL: 1 } },
+      { label: "D", text: "面无表情走开，但记仇三年", scores: { EMO: -2, RUL: -2 } },
+    ],
+  },
+  {
+    id: 23,
+    dimension: "EMO",
+    text: "运动会你跑了最后一名，全班都在看，你？",
+    options: [
+      { label: "A", text: "冲过终点线后蹲在地上哭", scores: { EMO: 2 } },
+      { label: "B", text: "笑着做鬼脸说\"我故意的\"", scores: { EMO: -2, PRE: -1 } },
+      { label: "C", text: "低头快速走回座位，三天不想说话", scores: { EMO: -2, PRE: 1 } },
+      { label: "D", text: "气得把号码布扯了扔掉", scores: { EMO: 2, RUL: -2 } },
+    ],
+  },
+  {
+    id: 24,
+    dimension: "EMO",
+    text: "生日那天爸妈完全忘了，你？",
+    options: [
+      { label: "A", text: "晚上主动提醒，边说边哭", scores: { EMO: 2, RUL: 1 } },
+      { label: "B", text: "什么也不说，但心里记一辈子", scores: { EMO: -2, PRE: 1 } },
+      { label: "C", text: "自己给自己买块小蛋糕吃", scores: { EMO: -2, NRG: 1 } },
+      { label: "D", text: "大发雷霆把房门反锁", scores: { EMO: 2, RUL: -2 } },
+    ],
+  },
+];
+
+// 兼容 CommonJS / ES Module / 浏览器全局
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = { QUESTIONS };
+}
+</script>
+  <script>/**
+ * KidTI 计分配置与辅助函数
+ */
+
+// D4 情绪天气 FOG（迷雾型）判定阈值
+// 基于实际分值校准：6 题 × ±2 极端横跳方差 = 4，取 3.5 确保横跳触发 FOG
+const FOG_VARIANCE_THRESHOLD = 3.5;
+
+// 维度极性定义
+const DIMENSION_POLARITY = {
+  NRG: { high: "BATTERY", low: "REACTOR" },
+  RUL: { high: "SHEEP", low: "WOLF" },
+  PRE: { high: "BLACKHOLE", low: "SPOTLIGHT" },
+  EMO: { high: "STORM", low: "LAKE", fog: "FOG" },
+};
+
+// 人格映射表（D1+D2 象限 × D3 × D4）
+const PERSONA_MAP = {
+  "BATTERY+SHEEP": {
+    BLACKHOLE: { STORM: "KPBL", LAKE: "WALL", FOG: "IMOK" },
+    SPOTLIGHT: { STORM: "KPI", LAKE: "DAREN", FOG: "CTRLC" },
+  },
+  "BATTERY+WOLF": {
+    BLACKHOLE: { STORM: "NUKE", LAKE: "DAMN", FOG: "NEIG" },
+    SPOTLIGHT: { STORM: "TNT", LAKE: "STUDY", FOG: "GODD" },
+  },
+  "REACTOR+SHEEP": {
+    BLACKHOLE: { STORM: "GLUE", LAKE: "502ER", FOG: "RUOK?" },
+    SPOTLIGHT: { STORM: "JOKER", LAKE: "MAPI", FOG: "TRUMP" },
+  },
+  "REACTOR+WOLF": {
+    BLACKHOLE: { STORM: "CHAOS", LAKE: "STEAM", FOG: "IPHONE" },
+    SPOTLIGHT: { STORM: "BOSS", LAKE: "YINM", FOG: "ELON" },
+  },
+};
+
+/**
+ * 计算 D4 方差与判定结果
+ * @param {number[]} d4Scores - 用户每道 D4 题选择的 EMO 分值数组（如 [2, -1, -2, 1, 2, -2]）
+ * @returns {{ mean: number, variance: number, result: "STORM" | "LAKE" | "FOG" }}
+ */
+function calculateD4(d4Scores) {
+  const n = d4Scores.length;
+  if (n === 0) return { mean: 0, variance: 0, result: "FOG" };
+
+  const mean = d4Scores.reduce((a, b) => a + b, 0) / n;
+  const variance = d4Scores.reduce((sum, s) => sum + Math.pow(s - mean, 2), 0) / n;
+
+  let result;
+  if (variance > FOG_VARIANCE_THRESHOLD) {
+    result = "FOG";
+  } else if (mean > 0) {
+    result = "STORM";
+  } else {
+    result = "LAKE";
+  }
+
+  return { mean, variance, result };
+}
+
+/**
+ * 根据四维度结果匹配人格代号
+ * @param {{ NRG: string, RUL: string, PRE: string, EMO: string }} dimensions
+ * @returns {string} 人格代号
+ */
+function matchPersona(dimensions) {
+  const key = `${dimensions.NRG}+${dimensions.RUL}`;
+  return PERSONA_MAP[key]?.[dimensions.PRE]?.[dimensions.EMO] || null;
+}
+
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = {
+    FOG_VARIANCE_THRESHOLD,
+    DIMENSION_POLARITY,
+    PERSONA_MAP,
+    calculateD4,
+    matchPersona,
+  };
+}
+</script>
+  <script>/**
+ * KidTI 24 种人格完整数据（v2.0 — 童年人格全景档案）
+ * 包含核心画像 + 人格成分解析 + 情境剧本 + 隐藏档案 + 人格关系谱 + 成长预言
+ * 自动生成时间：2026-06-01T12:14:45.864Z
+ */
+
+const PERSONAS = {
+  "KPBL": {
+    name: "我没事型",
+    definition: "眼泪是偷偷流的，奖状是公开领的",
+    description: "你从小就是家长和老师口中的'乖孩子'。奖状贴满墙，成绩从不让人操心，但没人知道你半夜躲在被子里哭过多少次。\n\n你的情绪像被设了静音模式，所有崩溃都是无声的。你不是没有感觉，只是太早学会了把眼泪留到没人看见的地方。",
+    reading: "全班最懂事的那个，也是厕所隔间里哭得最凶的那个。你已经习惯了把情绪调成静音模式。\"I'm fine\" 是每个乖孩子的第一句谎言。像水豚一样情绪稳定——稳定到连崩溃都是静音的。",
+    slogan: "像水豚一样情绪稳定——稳定到连崩溃都是静音的",
+
+    // ===== v2.0 新增：人格成分解析 =====
+    components: {
+      nrg: "你是BATTERY充电型，独处才能回血。放学路上那二十分钟是你一天中最真实的时光，背着书包一个人走，终于不用笑了。和人待太久你会头晕，像手机开了一整天热点。独处不是选择，是刚需。",
+      rul: "你深谙不作不死的基本原理，永远选最安全的那条路。老师说什么你就做什么，不是认同，是算过账：反抗成本太高。你的顺从里全是精明，只是没人看出来。",
+      pre: "你活在看见与看不见的撕扯里。合唱时永远站最边上、嘴巴张得最小但声音最大，怕被老师点名。你渴望被看见，又恐惧成为焦点，于是在这两极之间把自己撕成两半。",
+      emo: "领奖台上笑得像朵花，回教室趴在桌上就掉泪，而且没人知道为什么，包括你自己。情绪来去如风，破坏力惊人，但观众席永远空无一人。"
+    },
+
+    // ===== v2.0 新增：情境剧本 =====
+    scenarios: {
+      family: "年夜饭上亲戚夸你成绩好，你妈笑着说\"她可省心了\"。你低头夹菜，筷子攥得发白。半小时前你还在房间里哭，现在这笑容挂在脸上，连你自己都分不清真假了。这种切换你已经太熟练。",
+      classroom: "月考成绩公布，你又是前三。全班鼓掌，你站起来鞠躬，嘴角弧度精准。坐下后发现指甲在掌心掐出了印——你错了一道不该错的题，那红叉在你脑子里放了一整节课，怎么擦也擦不掉。",
+      social: "课间操结束，几个女生在聊周末去哪玩，你站在旁边插不进话。有人问你：\"一起去吗？\"你心跳加速，说\"可能要补课\"。其实你根本没课，但你怕冷场、怕她们其实不想要你去，还是一个人安全。",
+      alone: "晚上十一点，作业写完了。你从抽屉摸出带锁的日记本，写了三行字就开始哭。不是今天发生了什么，是每一天都在发生。哭完去卫生间洗脸，对着镜子确认眼睛不红了才上床，这是你的固定流程。",
+      crisis: "小组作业里有人把你的想法说成自己的，老师夸她\"真有创意\"。你张了张嘴，终于说了声\"谢谢\"。放学跑到天台对着空气大喊了三声脏话，喊完赶紧看周围有没有人。回家你妈问你今天开心吗，你说\"挺好的\"。这答案你说了十二年。"
+    },
+
+    // ===== v2.0 新增：隐藏档案 =====
+    hidden: "你把每一张奖状都当作赎罪券——用更多的优秀去抵那些\"不够好\"的念头。你不是热爱学习，你只是不敢停下。一旦停下来，那个\"不够好的自己\"就会追上来。你活成了父母的骄傲，却弄丢了自己的声音。",
+
+    // ===== v2.0 新增：人格关系谱 =====
+    relations: {
+      best: {
+        code: "NUKE",
+        name: "闷声大雷",
+        reason: "TA也憋着，但憋的是炸药不是眼泪。你俩凑一起，一个沉默一个引爆，意外地平衡。"
+      },
+      worst: {
+        code: "CHAOS",
+        name: "恶作剧永动机",
+        reason: "TA专门拆你小心翼翼维护的秩序。你花了三年建的城堡TA一脚踹了。你怕TA，更怕的是心底那点隐秘的羡慕。"
+      },
+      mystery: {
+        code: "GLUE",
+        name: "人形牛皮糖",
+        reason: "你无法理解一个人怎么可以那样黏糊糊地活着。你的本能是逃跑，但TA永远笑着追上来。"
+      }
+    },
+
+    // ===== v2.0 新增：成长预言 =====
+    prophecy: "你会变成在朋友圈发精致生活照、深夜换小号写emo文案的那种人。外人眼里你一帆风顺，只有你知道每次庆祝的方式是把自己关在车里抽一小时烟。你不会崩溃，只会慢慢生锈。"
+  }
+,
+  "WALL": {
+    name: "奖状陈列品",
+    definition: "别人家的孩子，也是完美的受害者",
+    description: "你的童年是一场永无止境的展览，每一个奖杯、每一张证书都是你存在的证据。你学会了用成绩换认可，用奖状换安全感。\n\n但你从未问过自己：如果撕掉这些标签，你还剩下什么？",
+    reading: "奖状贴满墙，创伤藏床底。\"乖\"是你唯一的生存技能，你已经忘了自己本来喜欢什么。你爸妈的朋友圈封面，是你最新的一张奖状。你是奖品收集者（prize collector），一面墙都是你的战利品——但你不知道自己在打什么仗。",
+    slogan: "你是奖品收集者，一面墙都是你的战利品——但你不知道自己在打什么仗",
+
+    // ===== v2.0 新增：人格成分解析 =====
+    components: {
+      nrg: "你从人群吸取的从来不是能量，只有任务。回家关上门那一刻，你终于从\"好孩子\"这个角色下班。一个人的时候你连呼吸都变轻了，不是因为孤独，是因为终于可以放松了。",
+      rul: "别的小孩闹一闹能要到糖，你闹一闹只换来一句\"你怎么也这样\"。所以你学会了，不闹。规则不是约束你，是你用来约束自己的枷锁，而且这锁是你亲手铸的。",
+      pre: "合照时你永远站在最角落、修图时最容易被裁掉。但你的名字永远在成绩单最上面。你像博物馆里的名画，人人都知道你的存在，但没人停下来问你挂在那里累不累。",
+      emo: "你忘记上一次放声大哭是什么时候了，也许是小学二年级？现在你只会头疼、失眠、胃痛，医生说没毛病。情绪找不到出口，就在身体里安家，化作慢性的、说不清的难受。"
+    },
+
+    // ===== v2.0 新增：情境剧本 =====
+    scenarios: {
+      family: "亲戚让你表演刚学的钢琴曲。你坐在琴凳上，手指落在琴键上，脑子里想的却是上周考砸的那科。弹完大家鼓掌，你鞠躬，整个过程像设定好程序的机器。回房间时锁舌咔哒一声，那是你今天听到的最美妙的声音。",
+      classroom: "作文题《我的梦想》，你写了\"想当医生\"，因为知道这是最不会出错的答案。其实你也不确定自己想做什么。发下来老师给了满分，批着\"立意高远\"。你盯着那四个字看了很久，觉得像在给一个你不认识的人写评语。",
+      social: "体育课自由活动，女生们分成几拨在玩。你坐在石阶上假装看远处。有人问你：\"怎么不一起玩？\"你说\"我在等人\"。其实你在等下课铃。你不讨厌她们，只是不知道自己该站在哪个位置。",
+      alone: "放学回家，家里没人。你放下书包，没有开灯，在沙发上坐了十五分钟。什么也没做。这十五分钟是你今天最真实的存在。然后你打开灯开始写作业，恢复成\"不需要操心的孩子\"模式。",
+      crisis: "期末考你掉出了前三。整个晚自习一个字没看进去，脑子里在排练怎么跟父母交代、怎么面对老师的失望。放学回家站在门口深呼吸了十次才掏钥匙。进门第一句：\"妈，这次我没考好。\"说出来才发现自己一直在发抖。"
+    },
+
+    // ===== v2.0 新增：隐藏档案 =====
+    hidden: "你把人生过成了防御工事——只要够好，就没人能责怪你；只要没有缺点，就没有人能伤害你。你不是不想任性，你是不敢。\"别人家的小孩\"这顶王冠太重了，但你宁愿被压弯了腰，也不敢摘下来看看下面到底是什么。",
+
+    // ===== v2.0 新增：人格关系谱 =====
+    relations: {
+      best: {
+        code: "NEIG",
+        name: "幽灵叛徒",
+        reason: "TA表面也乖，但骨子里已经叛逃了。你羡慕那种不动声色的叛逆，像看另一个版本的自己。"
+      },
+      worst: {
+        code: "BOSS",
+        name: "混沌魔王",
+        reason: "TA是规则的破坏者，是你最恐惧成为的那种人。遇到TA你就浑身不自在，因为你辛苦维护的一切，在TA眼里一文不值。"
+      },
+      mystery: {
+        code: "502ER",
+        name: "502精",
+        reason: "TA怎么能那么自然地黏着别人、撒娇、要东西？你看着都觉得累，但偏偏TA人缘最好。你学不会，也想不通。"
+      }
+    },
+
+    // ===== v2.0 新增：成长预言 =====
+    prophecy: "你会成为非常靠谱的大人，靠谱到所有人都放心把事交给你。三十岁得胃溃疡，四十岁在超市零食货架前崩溃——小时候想吃但不健康的东西，现在吃也没感觉了。你不会找咨询师，会给自己列改善计划表，然后继续这样下去。"
+  }
+,
+  "IMOK": {
+    name: "我很好型",
+    definition: "表面光鲜，不知道什么时候就裂了",
+    description: "你是所有人眼中最完美的瓷器，光滑、精致、毫无瑕疵。但只有你自己知道，那些看不见的裂缝正在一点点蔓延。\n\n'I'm OK'是你最熟练的谎言，比'I'm fine' 说得更不假思索，连你自己都快信了。",
+    reading: "今天你又是全班的榜样，但你知道自己离崩溃只差一道小小的裂缝。而且裂缝正在蔓延。\"I'm OK\" 是每个乖孩子的第二句谎言——比\"I'm fine\" 更熟练，更不假思索。",
+    slogan: "\"I'm OK\" 是每个乖孩子的第二句谎言——比\"I'm fine\" 更熟练，更不假思索",
+
+    // ===== v2.0 新增：人格成分解析 =====
+    components: {
+      nrg: "你能在人前维持很长一段时间的\"正常\"，然后突然消失几天。朋友以为你高冷，其实你是电量耗尽自动关机了。最尴尬的是充电还慢，别人社交是快充，你是老诺基亚，嗡嗡响一晚上才一格。",
+      rul: "你努力摸清每一条明规则和潜规则，小心翼翼不踩线。但你也说不清自己在怕什么，反正不能越界。这种怕已经刻进骨子里了，变成了你性格的一部分。你乖得连自己都觉得假，但改不了。",
+      pre: "你在人群里常常是那个\"哦对，TA也在\"的存在。但又不甘心真的隐形，会做一些突兀的事引起注意，然后又后悔。你像信号不好的WiFi，时隐时现，连自己都不知道下一秒是什么状态。",
+      emo: "上午还能笑着参加班会，下午就可能因为一句无心的话摔门而去。不是作，是真的控制不了。你就像一台情绪随机播放器，自己都不知道下一首是什么。"
+    },
+
+    // ===== v2.0 新增：情境剧本 =====
+    scenarios: {
+      family: "家庭聚餐，你化了最精神的妆。亲戚都说你气色好，你妈夸你\"最近很阳光\"。半小时前你还在房间里对着墙壁发呆不想出门。只有在去卫生间的两分钟里，你对着镜子做了一个没有任何表情的脸——那才是真的你。",
+      classroom: "英语课老师点名让你读课文，你站起来声音洪亮、发音标准。全班都没发现你手心全是汗。坐下后心跳快得像刚跑完八百米，但脸上维持着\"这题很简单\"的微笑。下课趴在桌上，那两分钟用掉了今天所有的勇气。",
+      social: "你和同学一路从教室走到食堂，聊了一路八卦。对方笑得很开心，你也笑得很开心。但你的脑子有一大半在想：刚才那句话是不是说多了？这种社交后的反刍能折磨你两天，但下次有人找你，你还是会笑着走过去。",
+      alone: "周五晚上，你终于一个人待着了。手机静音，窗帘拉上。刷了两小时手机不知道自己看了什么，然后突然开始哭。没有原因，也可能是太多原因了，你分不清。哭够了去洗把脸，发一条朋友圈：\"周末愉快~\"配图是精致的奶茶。",
+      crisis: "小组合作有人摆烂，deadline前一天什么都没交。你在群里打了删删了打，终于发出去：\"没关系的，我来补吧。\"然后通宵赶工，边做边哭，但没人知道。第二天顶着黑眼圈交上去，还笑着说\"刚好我也睡不着\"。你恨自己的怂，但更恨的是你发现自己真的习惯了。"
+    },
+
+    // ===== v2.0 新增：隐藏档案 =====
+    hidden: "所有的热闹都是你精心编排的节目，剧本在心里改了五遍才发出那句看似随意的调侃。你不是在交朋友，是在应聘\"正常人\"这个岗位。最可怕的是面试时间越来越长，你连下班的机会都没有，因为你已经分不清哪个才是真的你了。",
+
+    // ===== v2.0 新增：人格关系谱 =====
+    relations: {
+      best: {
+        code: "STUDY",
+        name: "聪明反骨",
+        reason: "TA用脑子 rebel，你用心力硬撑。你们都不太正常，但至少能一起吐槽正常的标准是什么。和TA在一起你不用笑得那么用力。"
+      },
+      worst: {
+        code: "ELON",
+        name: "暴君幼体",
+        reason: "TA是天生的统治者，而你连被统治都想讨好统治者。靠近TA你会自动切换成奴才模式，事后又痛恨自己。这很不健康。"
+      },
+      mystery: {
+        code: "MAPI",
+        name: "老师爱宠",
+        reason: "TA怎么能那么自然地讨好大人还乐在其中？你讨好是为了生存，TA讨好是本能。"
+      }
+    },
+
+    // ===== v2.0 新增：成长预言 =====
+    prophecy: "你会变成聚会后独自在出租车里沉默、回家对着镜子卸妆时突然不认识自己的那种人。二十八岁可能会来一次不大不小的\"精神感冒\"，然后请一周假谁都没告诉。你不会彻底崩溃，只会慢慢地变成一个连自己都觉得陌生的存在。"
+  }
+,
+  "KPI": {
+    name: "排名奴隶",
+    definition: "输不起的优等生",
+    description: "你的人生是一场永无止境的排名赛。分数、名次、奖学金——你把自己的价值全部押在这些数字上。\n\n你赢了比赛，却输掉了一个可以犯错、可以脆弱、可以不被评价的童年。",
+    reading: "考99分等于不及格。你的人生信条是\"要么金牌，要么销毁\"。快乐是什么？不认识。你人生的意义是一个数字，而且这个数字还不是你的。",
+    slogan: "你人生的意义是一个数字，而且这个数字还不是你的",
+
+    // ===== v2.0 新增：人格成分解析 =====
+    components: {
+      nrg: "只有确定自己能赢的时候，你才愿意出场。你讨厌无意义的社交，但如果是班干部竞选、奥数比赛，你能在台上发光两小时。那不是真的你在发光，是你给自己装了舞台灯。灯一关你就蔫了，得一个人窝好久才能缓过来。",
+      rul: "你是规则的坚定拥护者，因为在这套规则里你永远是赢家。但你不是认同规则，是把它研究透了然后玩成通关游戏。你是那个在游戏厅打通所有机器的人——不是因为爱玩，是受不了排行榜上有人在你上面。",
+      pre: "上次合唱比赛老师让你站第二排，你一整晚没睡不着，反复想是不是自己哪里做得不好。存在感对你来说不是享受，是生存指标。一旦掉出中心，你就开始恐慌。",
+      emo: "考好了你是全班最阳光的人，考砸了你能在教室里制造低气压。你也试过收敛，但装了一节课就憋不住了。你的情绪所有人都能看出来，你也控制不了这种外放。"
+    },
+
+    // ===== v2.0 新增：情境剧本 =====
+    scenarios: {
+      family: "月考你是年级第二。回家你妈说\"已经很好了\"，你说\"嗯\"。回房间对着第一名的名字看了二十分钟，分析她哪科比你高。晚上给自己列了二十条改进计划，写完凌晨两点，你觉得第二名和倒数第一没有区别。",
+      classroom: "班主任公布小测成绩，你以0.5分之差输给了同桌。你笑着说\"下次超过你\"，声音比平时大三度。那节课笔记记得特别认真。下课铃响你第一个冲出去，跑到厕所隔间里深呼吸了十次，怕自己在教室里哭出来。",
+      social: "期中表彰大会，你作为学生代表上台发言。稿子改了七遍，背得比乘法口诀还熟。下台后有人夸你\"讲得真好\"，你谦虚说\"没有没有\"。其实那个\"没有\"是在否定自己的表现——你知道第三段有个停顿多了一秒。",
+      alone: "晚上十点作业全部完成，你拿出错题本开始整理。这是一天中最有掌控感的时刻——把错误归类、标注原因、写上改进方案。手机响了，朋友约周末出去。你回复：\"要补课，下次吧。\"坐在书桌前的感觉比出去玩踏实一百倍，因为在这里，分数不会骗你。",
+      crisis: "竞赛结果出来了，三等奖。颁奖仪式上你面带微笑上台，回到座位上把奖状塞进书包最底层。那天放学后你破天荒没有直接回家，在操场跑了十圈。跑的时候脑子是空的，只有风声。你知道三等奖也不错了，但\"不错\"这个词对你来说就是贬义词。"
+    },
+
+    // ===== v2.0 新增：隐藏档案 =====
+    hidden: "你把人生过成了永无止境的竞赛，而且不允许自己输。你不是喜欢赢，你是害怕输。每一次落后都像是对你这个人本身的否定。你用排名证明自己存在，却不知道没有排行榜的地方，你要怎么活下去。成绩是你的氧气罐，离开这个环境你可能会窒息。",
+
+    // ===== v2.0 新增：人格关系谱 =====
+    relations: {
+      best: {
+        code: "TNT",
+        name: "野生熊孩子",
+        reason: "TA不在乎规则也不在乎排名，而这恰好是你最缺的。和TA混你会被迫放松。"
+      },
+      worst: {
+        code: "IPHONE",
+        name: "人形黑洞",
+        reason: "TA也是焦点，但是天生的，你是后天的。你拼命争取的东西TA不费吹灰之力。"
+      },
+      mystery: {
+        code: "JOKER",
+        name: "班级小丑",
+        reason: "你怎么也想不通为什么有人愿意当丑角、被人笑？你最怕被人看轻。"
+      }
+    },
+
+    // ===== v2.0 新增：成长预言 =====
+    prophecy: "你会考进很好的大学、找到很好的工作、最早升职。三十五岁可能遭遇职场滑铁卢——遇到不按排名的老板。那时候你会发现，自己除了会赢，好像没学过别的活法。至于输了要怎么过，那是你从没做过的一道题。"
+  }
+,
+  "DAREN": {
+    name: "实习大人",
+    definition: "童年是人生的实习生",
+    description: "当别的小朋友还在玩泥巴的时候，你已经在写会议纪要了。你早熟、稳重、靠谱——像是一个被塞进小孩身体里的成年人。\n\n但你忘了，童年本来就不是实习期，而是一个允许你慢慢长大的地方。",
+    reading: "幼儿园就开始写会议纪要。你没有童年，你只有\"预备役 adulthood\"。别的小朋友在玩泥巴，你在整理纪律。",
+    slogan: "别的小朋友在玩泥巴，你在整理纪律",
+
+    // ===== v2.0 新增：人格成分解析 =====
+    components: {
+      nrg: "你总是在主持班会、协调矛盾、帮老师传话。回到家就瘫成一滩泥，连说话的力气都没有。你的\"可靠\"是透支额度换来的，刷爆了就得一个人安静地充电。你像个24小时便利店，灯永远亮着，但没人问过电费贵不贵。",
+      rul: "同学们觉得你成熟，老师觉得你懂事，其实你只是在提前适应成年人的世界。你早早就学会了\"应该\"比\"想要\"重要，这种早熟让你赢在了起跑线，也让你直接跳过了童年。你不太记得上一次任性是什么时候了。",
+      pre: "你习惯站在人群中央，不是因为喜欢被看，是因为那个位置需要你。老师点名让你当班长、家长会上你被当作典型表扬。你已经习惯了扮演\"让大人放心\"的角色，演得太久，你都分不清戏里戏外了。",
+      emo: "你的情绪管理能力堪比三十岁职场人，问题是那时候你才十二岁。不哭、不闹、不发脾气，把所有感受都压缩成一句\"我没事\"。Lake的水太深了，深得你自己都潜不到底。"
+    },
+
+    // ===== v2.0 新增：情境剧本 =====
+    scenarios: {
+      family: "爸妈吵架，你坐在客厅假装看电视。等声音小了，你倒了两杯水分别送进去。他们接过杯子，不吵了。你关上门，书包里还有一张今天发的试卷没给他们看——不是怕骂，是怕再添一件烦心事。",
+      classroom: "自习课两个同学吵了起来，全班在看热闹。你走过去说：\"行了，给老师听见又得全班挨批。\"他们瞪了你一眼，但坐下了。你回到座位，手在微微发抖——你其实也很怕，但更怕局面失控。",
+      social: "春游分组闹了矛盾。你主动分到人数最少的那组，还拉了落单的人过来。活动结束后大家都说你组织得好，你笑笑说\"应该的\"。其实你也很想和最好的朋友一组，但你知道那样会留下一个没人要的人。",
+      alone: "晚上爸妈睡了，你坐在书桌前，面前摊着一本课外书。但你没在看，在发呆。白天那个面面俱到的自己像一件脱下来的外套。你现在什么都不是，不是班长、不是乖孩子、不是任何人的依靠。这种\"什么都不是\"的感觉让你恐慌又上瘾。",
+      crisis: "期末考前一天，最好的朋友爸妈闹离婚，TA在电话里哭得说不出话。你放下复习资料陪TA聊到凌晨。挂掉电话还有五个小时可以睡。你没后悔。你永远会选\"别人需要我\"而不是\"我需要什么\"。"
+    },
+
+    // ===== v2.0 新增：隐藏档案 =====
+    hidden: "你早就不记得自己真实的想法是什么了。每次做决定之前，自动开启的计算模式是：谁需要我？谁会被影响？怎样对大家都好？唯独没有\"我想要什么\"。你不是没有欲望，是你早就学会了把欲望静音。最可怕的是，你有时候觉得这样也没什么不好。",
+
+    // ===== v2.0 新增：人格关系谱 =====
+    relations: {
+      best: {
+        code: "GODD",
+        name: "暴动领袖",
+        reason: "TA是你想做但不敢做的那一面——打破规则、煽动群众。靠近TA你能短暂活在自己的青春里。"
+      },
+      worst: {
+        code: "STEAM",
+        name: "冷静钻头",
+        reason: "TA也冷静，但TA的冷出于控制，你的冷出于压抑。你们互相看穿，都讨厌被看穿。两个面具人对视，谁先摘谁就输了。"
+      },
+      mystery: {
+        code: "RUOK?",
+        name: "情绪开关",
+        reason: "TA怎么能那么直白表达感受？害怕就说害怕。你看着都觉得惊悚，学不来。"
+      }
+    },
+
+    // ===== v2.0 新增：成长预言 =====
+    prophecy: "你会成为所有人都信任的人——同事找你倾诉、家人依赖你、朋友有事第一个想到你。三十岁你或许会在深夜想：如果当初不那么懂事，现在会不会更快乐？你不会找答案的，只会把这个念头压到湖底，继续演下去。"
+  }
+,
+  "CTRLC": {
+    name: "赝品小孩",
+    definition: "表演型乖孩子，面具戴久了摘不下来",
+    description: "你是一台精密的模仿机器，能精准复制大人口中的'好孩子的标准答案'。但你慢慢发现，镜子里的自己越来越模糊。\n\nCtrl+C 你的人生，Ctrl+V 你的表情——粘贴的次数多了，连原件是什么都忘了。",
+    reading: "你已经演了十五年\"好孩子\"，导演喊卡的时候你已经老了。你演得太好了，好到连你自己都分不清哪个是真的你。Ctrl+C 你的人生，Ctrl+V 你的表情。",
+    slogan: "Ctrl+C 你的人生，Ctrl+V 你的表情",
+
+    // ===== v2.0 新增：人格成分解析 =====
+    components: {
+      nrg: "你能在舞台上连续发光好几个小时，但下台后必须立刻找个没人的角落瘫着。你不是在充电，是在回魂。每次完美表现都是把灵魂抽出来暂存，用一具训练有素的躯壳完成任务。社交对你来说不是互动，是演出。",
+      rul: "你对规则的掌握到了可怕的程度，不是因为认同，是因为把它当通关攻略。你认真研究过什么样的行为能获得什么样的反馈，然后精准投放。乖是你的产品，听话是你的品牌。你是最早懂得\"人设\"的一批人。",
+      pre: "你必须被看见，因为存在本身就是一场表演。没有观众，表演就没有意义。但你也分不清聚光灯下那个完美的自己和黑暗里那个空壳，到底哪个才是真的。你像一面镜子，反射出别人想看到的样子，但镜子背面空空如也。",
+      emo: "你可以前一秒在老师面前笑得阳光灿烂，后一秒在走廊拐角面无表情。切换之快让你自己都害怕。有时候你觉得自己根本没有情绪，那些笑和泪都是正确反应，不是真心感受。"
+    },
+
+    // ===== v2.0 新增：情境剧本 =====
+    scenarios: {
+      family: "你爸带回来一个同事，你立刻切换\"懂事孩子\"模式：问好、倒茶、表演钢琴曲。张叔叔夸你有礼貌，你妈笑开了花。你回房间坐在床边发呆——刚才那个热情周到的小孩是谁？你不认识TA。但你也说不上来真正的你是什么样的，这问题你想了很久，没有答案。",
+      classroom: "作文《我最难忘的一天》，你写了去敬老院慰问老人。结构完整、立意高尚，老师当范文朗读。你低头记笔记，脸上是\"好害羞\"的微笑——这个微笑也是设计好的。你真正难忘的是在家打游戏通关，但你不会写那个。你写的是老师的期待，不是你自己。",
+      social: "下课铃响，你在一秒内判断了今天社交策略：A组聊八卦你插了条娱乐新闻，B组聊游戏你报了角色名。两拨人都觉得和他们是一边的。回到座位上算了算，今天社交KPI完成了，没有冷场、没有穿帮、没有暴露真实的你——因为你也不太确定那是什么。",
+      alone: "周末下午家里只有你。躺在床上盯着天花板，没有任何任务、观众、角色需要扮演。这种\"什么都不用演\"的空档让你不安。你打开电视不是为了看，是为了有个声音打破寂静。你发现自己无法忍受和自己独处，因为那个\"自己\"你不太熟，也不太喜欢。",
+      crisis: "家长会上老师当着全班家长表扬你。回家路上你妈问：\"你怎么不开心？\"你说\"没有啊，很开心\"。语气、表情、嘴角弧度都是正确的。但心里有个声音说：你演的。你突然恐慌——如果所有反应都是演的，那\"真的开心\"是什么感觉？"
+    },
+
+    // ===== v2.0 新增：隐藏档案 =====
+    hidden: "表面上看你是完美小孩的顶配版，奖状多、人缘好、老师爱、家长疼。但你早就忘记了不做表演的自己长什么样。每次社交都是即兴演出，演技纯熟到可以拿奖，只是台下没有评委。",
+
+    // ===== v2.0 新增：人格关系谱 =====
+    relations: {
+      best: {
+        code: "DAMN",
+        name: "背后冷刀",
+        reason: "TA也擅长伪装，只是方向不同——你演好人，TA演无害。你们互相能闻到同类的味道。"
+      },
+      worst: {
+        code: "YINM",
+        name: "冷面棋手",
+        reason: "TA是天生的，你是后天的。你的每一步都是计算，TA的每一步都是本能。你读不懂TA。"
+      },
+      mystery: {
+        code: "TRUMP",
+        name: "儿童政客",
+        reason: "你们都是演的，但TA知道自己想要什么，你只是知道自己应该是什么样。"
+      }
+    },
+
+    // ===== v2.0 新增：成长预言 =====
+    prophecy: "你会成为在任何场合都游刃有余的人，职场如鱼得水、社交滴水不漏。二十五岁就会有人问你怎么那么成熟，你笑着说经历多了就这样。三十岁你可能在镜子前突然停住，发现保持微笑太久，脸上的肌肉都僵了。"
+  }
+,
+  "NUKE": {
+    name: "闷声大雷",
+    definition: "蔫坏，闷声作大死",
+    description: "你不吵不闹，不顶嘴不反抗，看起来是班级里最无害的存在。但你的沉默里藏着一座火山，所有人都知道它有，但没人知道它什么时候爆发。\n\n你是最安静的威胁，也是最被低估的变量。",
+    reading: "从来不正面冲突，但你的作业本会出现在垃圾桶里，别人的椅子会粘上口香糖。你不在现场，但你永远在现场。全班都知道是谁干的，但没人能证明。你是沉默的核武器——不发射，但所有人都知道你有。",
+    slogan: "你是沉默的核武器——不发射，但所有人都知道你有",
+
+    // ===== v2.0 新增：人格成分解析 =====
+    components: {
+      nrg: "你的电池容量极小，大部分时间都在低电量模式。课间别人满操场疯跑，你缩在座位里攒能量，不是不想动，是电量只允许你一天发作一次。社交对你来说是后台程序，一直耗电却看不到图标，所以你选择关掉它。",
+      rul: "你对规则的态度是选择性失聪。明面上的规矩你从不主动打破，但心里早就把它拆解成了漏洞清单。你不是叛逆，是懒得多说——反驳要耗电，而你电量不足，不如直接干了再说。",
+      pre: "你自动坐在教室最末排靠垃圾桶的位置，不是因为被罚，是因为那里没人看你。你以为自己隐形了，但你阴沉的气场比前排举手发言的人醒目一百倍。老师点名时永远跳过你，但你搞出动静时全班都回头。",
+      emo: "你的情绪是憋到临界点的热水壶。平时安安静静，甚至让人担心你是不是睡着了，但一旦被踩到那根线——摔书、踹门、或者突然冷笑一声——全班都知道你炸了。炸完你还变回那个闷葫芦，仿佛刚才的暴风雨是集体幻觉。"
+    },
+
+    // ===== v2.0 新增：情境剧本 =====
+    scenarios: {
+      family: "年夜饭桌上，七大姑八大姨攀比孩子成绩，你一声不吭扒饭。当三姨说\"我家儿子这次又第一\"时，你突然抬头问：\"三姨，表哥上次不是在厕所被人打哭了吗？\"全场安静，你继续扒饭，嘴角还沾着一粒米。",
+      classroom: "老师又在拖堂，全班敢怒不敢言。你从书包里掏出一个闹钟，调好最大音量，五分钟后教室里响起了\"叮铃铃铃——\"。老师愣住，你一脸无辜：\"我以为下课了。\"全班憋笑到内伤，有人把脸埋进了课本里。",
+      social: "后排男生正在炫耀新买的限量球鞋，一群人围着啧啧称赞。你走过去看了一眼，淡淡说：\"假的，标都缝歪了。\"然后转身就走，留下他一个人脸色涨红地跟围观者解释。你走到走廊窗边，偷偷弯了下嘴角。",
+      alone: "放学后的教室只剩下你一个人。你走到班长座位前，盯着她贴满便利贴的课桌看了三秒，把她最宝贝的那张\"期末目标\"撕下来，折成纸飞机，从窗户飞了出去。然后背上书包，像什么都没发生一样离开。",
+      crisis: "班费丢了，班主任怒斥全班，要求自首。你本可以沉默，但看到班长哭唧唧的样子，你突然举手：\"老师，上周我看见生活委员在网吧充游戏点卡。\"乱套了，但你坐回角落，觉得世界公平了一点。"
+    },
+
+    // ===== v2.0 新增：隐藏档案 =====
+    hidden: "表面你不合群、难相处、浑身带刺，其实你比谁都渴望被看见——只是主动开口要安全感，而你从来没有。你每次搞破坏后偷偷观察别人的反应，不是为了确认伤害，是想看看有没有人注意到你。你不是坏，你只是不知道怎么按下\"开始\"键。",
+
+    // ===== v2.0 新增：人格关系谱 =====
+    relations: {
+      best: {
+        code: "WALL",
+        name: "奖状陈列品",
+        reason: "WALL不吵不闹专注刷题，你在旁边发呆互不干扰，你们共享着安静的角落，是世界上彼此最不需要解释的存在。"
+      },
+      worst: {
+        code: "MAPI",
+        name: "老师爱宠",
+        reason: "MAPI一眼看穿你的小动作然后报告老师，而你最恨这种把\"乖\"当武器的人，你们是暗处的天敌。"
+      },
+      mystery: {
+        code: "CHAOS",
+        name: "恶作剧永动机",
+        reason: "CHAOS搞事为了热闹，你搞事为了安静，同样破坏规则却动机截然相反，你看不懂他的快乐。"
+      }
+    },
+
+    // ===== v2.0 新增：成长预言 =====
+    prophecy: "长大以后你变成了那个在会议上不说话、关键时刻投反对票的人。你的沉默被误以为是城府，其实是还在攒电量。某天你会遇到一个不需要你省电的人——在那之前，别把自己憋炸了。"
+  }
+,
+  "DAMN": {
+    name: "背后冷刀",
+    definition: "用沉默捅刀的反抗者",
+    description: "你的反抗从来不是正面冲突。你擅长在老师转身后翻白眼，在家长关门后冷笑，在所有人都没注意的时候，把规则捅出一个洞。\n\n你的沉默不是金，是淬了毒的刀——看不见伤口，但痛是真的。",
+    reading: "你不哭不闹，你只是用一句精准的话让人社死。老师是拿你没办法，但同学都知道你是冷暴力艺术家。你的沉默不是金，是淬了毒的刀。",
+    slogan: "你的沉默不是金，是淬了毒的刀",
+
+    // ===== v2.0 新增：人格成分解析 =====
+    components: {
+      nrg: "你的电量条别人看不见，你自己也懒得看。别人耗能社交时你在冷眼旁观，等他们电耗光了，你满格出招。你不是内向，是战略储备。独处对你不是休息，是战前准备。",
+      rul: "你从不正面顶撞规则，因为那样会暴露你的位置。你擅长在规则缝隙里种刺——不经意间递一句评论，在某人耳边轻轻一提，然后看着规则从内部瓦解。你是那个让制度腐烂的人。",
+      pre: "你安静地坐在教室角落，没人注意你进出，没人记得你说过什么。但期末评教时，你写的那句\"老师上课经常接私人电话\"被校长看到了。存在感对你来说是匕首，出鞘就要见血。",
+      emo: "你的情绪像深冬的湖面，结冰三尺。没人看到你生气，因为你根本不会当众发火。但你知道每一个惹过你的人的软肋——那个爱炫耀的其实怕孤独，那个凶巴巴的最在意妈妈。你在沉默里记住了一切。"
+    },
+
+    // ===== v2.0 新增：情境剧本 =====
+    scenarios: {
+      family: "妈妈问你\"今天在学校怎么样\"，你说\"挺好的\"。晚上她接到班主任电话，说你今天在黑板上写了批评学校的打油诗。你坐在沙发上拼乐高，一脸茫然，仿佛那不是你的手笔。妈妈开始怀疑自己的记忆。",
+      classroom: "班会选班长，老师让大家匿名投票。你投了那个最不可能当选的人——上周欺负过你的小胖。结果他真当选了，一个月后班级纪律全崩。你看着乱哄哄的教室，心里默默想：这就是民主的代价。",
+      social: "小组作业里那个总指使你干活的女生，这周失恋了到处找人哭诉。你递纸巾，听她说完，然后轻声说：\"其实他上周就跟隔壁班花在一起了，全班都知道，我以为你也知道。\"她愣住，你转身离开。",
+      alone: "放学后的走廊空无一人。你走到公告栏前，看着那张\"文明班级\"流动红旗，从口袋里掏出一支马克笔，在角落写了四个小字。第二天全校都在传布告栏上出现了\"此地无银\"四个字，没人知道是谁干的。",
+      crisis: "班主任当众批评你\"不合群\"，你低头不反驳。三天后的家长会上，某个\"匿名家长\"给校长写了一封信，详细列举了该老师收礼、偏心的所有细节。那封信的措辞，冷静得像一份法律文件。"
+    },
+
+    // ===== v2.0 新增：隐藏档案 =====
+    hidden: "表面你阴冷、记仇、不好惹，其实你的每一次\"捅刀\"都精确避开真正的弱者。你只刺向那些自以为安全的人——因为你也曾经弱小，你知道被忽视的滋味，你只是选择了不同的武器。你不是冷血，你只是热不起来。",
+
+    // ===== v2.0 新增：人格关系谱 =====
+    relations: {
+      best: {
+        code: "502ER",
+        name: "502精",
+        reason: "502ER黏人需要安全感，而你恰好懒得抢存在感，你们各取所需——他粘你，你默默替他挡掉欺负他的人。"
+      },
+      worst: {
+        code: "KPI",
+        name: "排名奴隶",
+        reason: "KPI把分数当命，而你一眼看穿排名游戏的荒谬，你们活在两个平行宇宙，互相觉得对方是悲剧。"
+      },
+      mystery: {
+        code: "YINM",
+        name: "冷面棋手",
+        reason: "YINM和你一样冷静，但他每一步都在布局，而你只是凭直觉出刀，你们沉默的方式截然不同。"
+      }
+    },
+
+    // ===== v2.0 新增：成长预言 =====
+    prophecy: "长大以后你成了一个沉默的观察者，可能是记者、律师，或者某个在深夜写匿名评论的人。你仍然会记住每一个人的软肋，只是学会了把刀换成笔。你的内心有一整个图书馆的账本，希望有一天你能学会销账。"
+  }
+,
+  "NEIG": {
+    name: "幽灵叛徒",
+    definition: "平时像天使，关键时刻反水",
+    description: "你是所有人的好朋友，直到投票那天。你擅长扮演忠诚的盟友，但在利益冲突的瞬间，你会毫不犹豫地选择对自己最有利的那一边。\n\n不是因为你坏，而是因为在你心里，从来就没有真正站过队。",
+    reading: "你是所有人的\"好朋友\"，直到投票选班长那天。你没有敌人，因为你把敌人都变成了\"以为你是朋友的人\"。你是所有人的好朋友，直到利益冲突那天。",
+    slogan: "你是所有人的好朋友，直到利益冲突那天",
+
+    // ===== v2.0 新增：人格成分解析 =====
+    components: {
+      nrg: "你是一台伪装成节能模式的战斗机。所有人以为你在休息，其实你在观察跑道。电池对你来说是伪装——别人降低防备时，才是你真正启动的时候。你不需要持久续航，只需要那一瞬间足够亮。",
+      rul: "你是规则体系里的特洛伊木马。表面上你遵守规则甚至比大多数人更好，但你在等一个时刻——规则自相矛盾的时刻、执行者犯错的时刻。你不反对规则，你只是喜欢在规则垮掉的时候推一把。",
+      pre: "你是老师口中\"最省心的孩子\"，家长眼里\"别人家的孩子\"。你安静、有礼貌、从不惹事——直到某个关键时刻你投出了反对票。没人想到是你，因为你在他们的记忆里几乎不存在。这就是你想要的效果。",
+      emo: "你的情绪是天生的伪装大师。前一秒还在微笑点头，下一秒就能面不改色地说出最刻薄的话。你自己也分不清哪个是真的——是乖巧的那个你，还是反水的那个你？或者两个都是假的？"
+    },
+
+    // ===== v2.0 新增：情境剧本 =====
+    scenarios: {
+      family: "亲戚聚会，你帮妈妈端茶倒水，所有长辈夸你懂事。当大姨让你表演钢琴时，你微笑着说\"好呀\"，然后弹了《国际歌》。一屋子人面面相觑，妈妈脸上的笑僵成了石膏。你弹完还鞠了一躬。",
+      classroom: "你是小组作业里干活最多、抱怨最少的人。展示前一天晚上，你在群里发消息：\"我觉得我们还是用最初的方案比较好。\"而那个方案只有你知道已经被你改得面目全非。组长回了一个大大的问号。",
+      social: "闺蜜跟你吐槽班长，你点头附和了半小时。第二天班长过来问你说了什么，你一脸惊讶：\"啊？她跟你说的吗？我可没这么说。\"然后精准复述了闺蜜的原话，只是主语换成了她自己。班长信了。",
+      alone: "放学后的空教室里，你走到班主任的办公桌前，翻开了她的评语本。你记住每一个关于你的评价——\"乖巧\"\"安静\"\"省心\"，然后轻轻合上。总有一天这些词会变成反讽，你对此很有耐心，比作业本上的红勾还有耐心。",
+      crisis: "全班联名上书要求换班主任，你是第一个签名的——也是第一个在校长面前说\"我其实挺喜欢老师的\"的人。两边都觉得你是自己人，而你知道自己谁也不站，你只是喜欢看着墙往两边慢慢倒。"
+    },
+
+    // ===== v2.0 新增：隐藏档案 =====
+    hidden: "表面你乖巧、温顺、人畜无害，其实你对\"被期待\"这件事恨之入骨。每一个夸你\"懂事\"的人，都在你的账本上记了一笔。你不是反社会，你只是厌倦了做一个方便别人的孩子。你的反叛不是出格，是回归。",
+
+    // ===== v2.0 新增：人格关系谱 =====
+    relations: {
+      best: {
+        code: "ELON",
+        name: "暴君幼体",
+        reason: "ELON需要执行力强的副手，你恰好能在他需要的时候精准反水替他开路，你们的组合是明枪暗箭的绝配。"
+      },
+      worst: {
+        code: "KPBL",
+        name: "我没事型",
+        reason: "KPBL太乖了，乖到你觉得没有反水的价值，你连捅刀的兴致都提不起来，无聊是你们之间最大的鸿沟。"
+      },
+      mystery: {
+        code: "GLUE",
+        name: "人形牛皮糖",
+        reason: "GLUE拼了命讨好所有人，而你伪装讨好精准爆破，同样靠近人群目的却截然相反，他越黏你越觉得可怕。"
+      }
+    },
+
+    // ===== v2.0 新增：成长预言 =====
+    prophecy: "长大以后你成了那个在会议上全程微笑关键时刻投反对票的人，或者在婚礼上说\"我愿意\"时眼神游离的人。你精通伪装，以至于忘了自己原来的样子。记住：最好的叛徒也需要一个可以摘下面具的房间。"
+  }
+,
+  "TNT": {
+    name: "野生熊孩子",
+    definition: "明着造反的熊孩子",
+    description: "你是规则的粉碎机，秩序的破坏者，老师办公室的常客。你不在乎后果，因为 consequences 是成年人才担心的事。\n\n老师看到你的背影就开始头痛，但你也让每一个死气沉沉的课堂有了一点真实。",
+    reading: "你不躲，你不藏，你当着老师的面把试卷撕了。动物园关不住你，精神病院或许可以。老师看到你的背影就开始头痛。",
+    slogan: "老师看到你的背影就开始头痛",
+
+    // ===== v2.0 新增：人格成分解析 =====
+    components: {
+      nrg: "你的电池是快充快放型，一刻也闲不住。别人的安静时间是充电，你的安静时间是漏电。你不储能，你燃烧。课间十分钟你能搞出别人一个月的事故量，然后下节课继续元气满满地破坏课堂纪律。",
+      rul: "规则对你而言是障碍物而不是边界线。你看到\"禁止\"两个字的第一反应是\"试试会怎样\"。你不是不懂规矩，你是忍不住——就像有人看到按钮就想按，看到\" Wet Paint\"就想摸。规矩存在的意义，就是让你打破。",
+      pre: "你必须站在所有人目光的正中央，哪怕是站在老师办公桌前面挨训。被表扬要最大声，被批评也要最醒目。存在感不是你的追求，是你的生理需求——你憋不住，就像憋不住尿一样自然。",
+      emo: "你的情绪全挂在脸上，也全甩在行动上。生气就摔门，开心就大笑，委屈就嚎啕——绝不含蓄，绝不隔夜。你以为自己很真实，其实你只是管不住。你的情绪天气预报永远是暴雨红色预警。"
+    },
+
+    // ===== v2.0 新增：情境剧本 =====
+    scenarios: {
+      family: "年夜饭上，爷爷刚说完\"食不言寝不语\"，你就大声问：\"那爷爷你刚才说话算不算违规？\"全桌安静。你得意地夹走仅剩的那只鸡腿，完全没注意到爸爸在桌下捏碎了核桃。奶奶偷偷笑了。",
+      classroom: "数学课讲到一半，你突然举手：\"老师，我肚子疼。\"老师刚要点头，你补充道：\"我是看见这道题恶心。\"全班爆笑，老师脸上的青筋你看得很清楚，但你就是管不住这张嘴。后排男生鼓起掌来。",
+      social: "学校新装了人脸识别门禁，你非要试试它能不能认出你扮鬼脸的样子。结果门开了，但你的鬼脸被拍下来发到全校群里。第二天所有人都知道有个傻子对着摄像头吐了舌头——就是你，高清无码版。",
+      alone: "放学后的空操场，你对着篮球架大喊：\"我是全校最牛的！\"回声传回来，你觉得不够劲，又爬上了双杠。十分钟后你摔了下来，膝盖擦破了皮，但你觉得自己刚刚征服了整个世界。血都没擦。",
+      crisis: "食堂大叔多收了班费，全班抱怨但没人出声。你直接冲窗口喊：\"退钱！\"然后被全校通报批评。但退回来的钱让全班吃了一个月的冰棍。处分贴纸被你贴在了铅笔盒上，那是你的勋章。"
+    },
+
+    // ===== v2.0 新增：隐藏档案 =====
+    hidden: "表面你天不怕地不怕，其实最怕的是没人看着你。你每次搞事之后偷偷瞄周围，确认有人在看才觉得值了。你不是不在乎别人的看法，你是太在乎了，在乎到只能用闯祸来换眼神。疯是一种病，孤独是病因。",
+
+    // ===== v2.0 新增：人格关系谱 =====
+    relations: {
+      best: {
+        code: "CHAOS",
+        name: "恶作剧永动机",
+        reason: "你们俩凑在一起就是班级的噩梦组合，一个点火一个浇油，老师看到你们同框就会本能地摸向降压药。"
+      },
+      worst: {
+        code: "WALL",
+        name: "奖状陈列品",
+        reason: "WALL是奖状成精，你是处分收集者，你们活在两个世界——她窗户明净，你窗玻璃上有脚印。"
+      },
+      mystery: {
+        code: "RUOK?",
+        name: "情绪开关",
+        reason: "RUOK?哭是为了被抱，你闹是为了被看，都是求关注但方式完全不同，你理解不了哭唧唧有什么意思。"
+      }
+    },
+
+    // ===== v2.0 新增：成长预言 =====
+    prophecy: "长大以后你要么成了创业老板，要么成了创业失败三次的老板。你的能量依然过剩，只是破坏的场地从教室换成了商场。记住：不是所有人都像你一样耐摔，学会轻拿轻放是你一辈子的功课。"
+  }
+,
+  "STUDY": {
+    name: "聪明反骨",
+    definition: "用逻辑反抗权威的刺头",
+    description: "你用三段论证明了老师错了，然后被罚站。你的逻辑无懈可击，但你的处境一塌糊涂——因为大人从来不欢迎一个比他们更聪明的小孩。\n\n你是真理的捍卫者，也是体制的牺牲品。",
+    reading: "你不但不听话，你还能用三段论证明老师错了。你是班里的苏格拉底，也是教导处的常客。你用逻辑战胜了老师，然后被罚站。",
+    slogan: "你用逻辑战胜了老师，然后被罚站",
+
+    // ===== v2.0 新增：人格成分解析 =====
+    components: {
+      nrg: "你的电量全花在思考上了。别人耗能于社交 drama，你的电全用来拆解老师话里的逻辑漏洞。你不是精力不足，是精力太挑食——无聊的事一秒耗电百分之十，有意思的思考能让你通宵达旦。",
+      rul: "你对规则的反抗是学术性的。别的孩子违反规则靠冲动，你靠论证——\"老师，您刚才说的和上周三说的自相矛盾，根据您自己的逻辑，我不该罚站。\"规则在你面前要经得起 peer review。",
+      pre: "你上课举手不是为了回答问题，是为了指出问题的错误。老师讲到一半你突然\"呃\"一声，全班回头看你推眼镜，然后说：\"老师，这个结论的前提不成立。\"你不在乎同学的白眼，你在乎真理。",
+      emo: "你的情绪深埋在逻辑冰层之下。你很少生气，但会冷静地列出某人\"十处错误\"并逐条分析。这比一般的发火伤人十倍。你 last time 哭是幼儿园，之后你觉得\"情绪用事\"是个逻辑错误。"
+    },
+
+    // ===== v2.0 新增：情境剧本 =====
+    scenarios: {
+      family: "爸爸训你\"大人说话小孩别插嘴\"，你平静地反问：\"那你为什么问我意见？如果我的意见不配被听到，你就不该问。问了又不让说，这叫自相矛盾。\"爸爸张着嘴半天没找到词，妈妈端着菜从厨房出来，也愣在门口。",
+      classroom: "班主任说\"全班都要参加\"合唱比赛。你举手：\"老师，'都要'包括请假的吗？包括转学的吗？包括已经退学的张三吗？\"老师让你闭嘴，你说：\"是您说的'都要'，我只是在帮您完善定义域，这是数学严谨性。\"",
+      social: "后排男生吹嘘他爸认识市长，你头也没回地说：\"认识是指见过面，还是有联系方式，还是每周一起打高尔夫？这三个级别的'认识'差别很大，建议你先明确定义再发言。\"他的声音越来越小，最终归于沉默。",
+      alone: "放学后的图书馆，你一个人坐在角落。不是在看教科书，是在读一本关于逻辑悖论的书。读到精彩处你突然拍桌子：\"原来如此！\"管理员瞪你一眼，你推推眼镜，假装什么都没发生，嘴角却在偷偷上扬。",
+      crisis: "年级主任宣布\"统一发型\"，男生不能过眉。你连夜写了一篇三千字的论证文：《论发型与学业表现的因果关系之不成立》，贴在了公告栏旁边。第二天被叫家长，但文章被复印传阅了一整个年级。"
+    },
+
+    // ===== v2.0 新增：隐藏档案 =====
+    hidden: "表面你冷静、刻薄、不通人情，其实每次用逻辑把人怼到下不来台之后，你都会偷偷担心对方会不会讨厌你。你不是不在乎人际关系，你只是更怕认输。聪明是你的盔甲，也是你的牢笼——你被困在\"永远正确\"里面，出不来了。",
+
+    // ===== v2.0 新增：人格关系谱 =====
+    relations: {
+      best: {
+        code: "STEAM",
+        name: "冷静钻头",
+        reason: "STEAM和你一样用冷静处理世界，你们能并排坐一下午不说一句话，但都懂对方在想什么，是无需言语的盟友。"
+      },
+      worst: {
+        code: "CTRLC",
+        name: "赝品小孩",
+        reason: "CTRLC全盘复制别人的生活方式，而你最鄙视没有独立思考的人，你们看一眼对方都觉得浪费视网膜。"
+      },
+      mystery: {
+        code: "JOKER",
+        name: "班级小丑",
+        reason: "JOKER用搞笑讨好全世界，你用逻辑攻击全世界，同样渴望被注意却走了完全相反的两条路，你觉得他傻，他觉得你累。"
+      }
+    },
+
+    // ===== v2.0 新增：成长预言 =====
+    prophecy: "长大以后你成了那个在会议上说\"这个数据不支持你的结论\"的人，然后收获了全会议室的沉默。你会一直正确下去，直到有一天发现：有些问题没有正确答案，只有不同版本的妥协。"
+  }
+,
+  "GODD": {
+    name: "暴动领袖",
+    definition: "带着全班造反的魅力领袖",
+    description: "你有一种危险的天赋：能让所有人都跟着你干蠢事。你不需要计划，不需要理由，只要一个眼神，全班就敢集体罢课。\n\n你是 God-tier 的麻烦制造者——不是因为你最疯，而是因为你让别人也想疯。",
+    reading: "你说\"走\"，全班就跟你走。老师最怕的不是你一个人捣乱，是你一笑，全班都笑了——那种笑。你说\"走\"，全班就跟着你走——去教导处。你是 God-tier 的麻烦制造者。",
+    slogan: "你是 God-tier 的麻烦制造者",
+
+    // ===== v2.0 新增：人格成分解析 =====
+    components: {
+      nrg: "你的电池容量惊人，而且你特别擅长偷别人的电。一个人闹腾是虚张声势，带着一群人闹腾才是你的天赋。你在人群里越说越精神，独处时反而蔫了——你需要观众来给自己充电。",
+      rul: "你对规则的态度是选择性失明——不是看不见，是看心情。今天遵守是因为懒得管，明天造反是因为突然想管了。你不是原则驱动，是即兴驱动。规则的存在意义就是等你来推翻。",
+      pre: "你不是站在C位，你就是C位本身。哪怕站在队伍最末尾，全班的目光也会自动聚焦到你身上。老师点名时总是先找你，不是因为你乖，是因为不先按住你，这节课别想上了。",
+      emo: "你的情绪像夏天的雷阵雨，来得快去得快，但破坏力惊人。前一分钟还在笑着拍同桌肩膀，下一分钟就能因为一句话掀桌。没人能预测你——包括你自己，这种不可控感恰恰是你的魅力所在。"
+    },
+
+    // ===== v2.0 新增：情境剧本 =====
+    scenarios: {
+      family: "全家聚餐讨论你上哪个初中，亲戚们各抒己见。你突然站起来说：\"我决定去最差的那个，听说那里不用写作业。\"然后看着大人们的表情从震惊到愤怒到无奈迅速切换。你笑着坐下，其实心里也没底。",
+      classroom: "自习课全班死气沉沉，你突然站上椅子喊：\"有没有人敢传纸条，从第一排传到最末排，不被老师发现就算赢！\"十分钟后教室里纸条飞舞，班主任冲进来时，你第一个坐下装无辜，但嘴角没藏住。",
+      social: "运动会报名没人愿意跑三千米，体育委员快哭了。你一把抢过报名表写上自己名字，然后转身对全班喊：\"我跑三千，你们每人给我喊一声加油，少一声我就半路躺下。\"结果看台喊声震天，你拿了倒数第二。",
+      alone: "放学后的空教室，你一个人站在讲台上，看着下面整齐的桌椅。你拿起粉笔，在黑板上画了一张全班同学的座位图，在每个位置上写了一句只有你知道的秘密。然后全部擦掉，像什么都没发生过。",
+      crisis: "食堂突然涨价，全校哗然但没人出声。你第一个摔筷子站起来，但不是去理论——你走到食堂中央，大声说：\"今天的菜里有虫子，我看见了。\"人群骚动起来。十分钟后涨价通知被撤回了。"
+    },
+
+    // ===== v2.0 新增：隐藏档案 =====
+    hidden: "表面你肆意妄为、无法无天，其实每次带头闹事之后你都会失眠。不是因为害怕惩罚，是因为你发现：当所有人跟着你起哄时，你突然觉得自己特别孤独——他们跟的是\"领袖\"，不是你。你甚至不确定没有了闹事，还有没有人会看你一眼。",
+
+    // ===== v2.0 新增：人格关系谱 =====
+    relations: {
+      best: {
+        code: "TRUMP",
+        name: "儿童政客",
+        reason: "TRUMP会拉票，你会煽动，一个玩制度内一个玩制度外，凑在一起能让整个学校的天翻过来。"
+      },
+      worst: {
+        code: "IMOK",
+        name: "我很好型",
+        reason: "IMOK是那种被欺负了还说\"没事\"的人，你看着他就来气——你觉得他应该在反抗，而不是微笑着消化。"
+      },
+      mystery: {
+        code: "IPHONE",
+        name: "人形黑洞",
+        reason: "IPHONE独来独往根本不需要你，你的号召力对他完全无效，这让你既困惑又隐隐有点嫉妒。"
+      }
+    },
+
+    // ===== v2.0 新增：成长预言 =====
+    prophecy: "长大以后你要么成了改变规则的创业者，要么成了专门钻规则空子的投机分子。你的领导力是天赋也是诅咒——总有人愿意跟你走，但你越来越不确定要把他们带向哪里。在你下一次掀桌子之前，先想好要换成什么样的桌子。"
+  }
+,
+  "GLUE": {
+    name: "人形牛皮糖",
+    definition: "过度兴奋的讨好型",
+    description: "你是人际关系里的工业粘合剂，哪里有裂缝你就粘哪里。你害怕被抛弃，所以总是第一个道歉、最后一个离开。\n\n但粘合剂的命运是：用力过猛，粘完就废。等所有人散场，你才发现自己粘在了原地。",
+    reading: "人一多你就失控，像喝了十瓶可乐的小狗。你只是想被喜欢，但你不知道自己的热情正在把人逼疯。你最好的朋友已经躲在厕所了，你还在隔间外面等。你是人际关系里的工业粘合剂——用力过猛，粘完就废。",
+    slogan: "你是人际关系里的工业粘合剂——用力过猛，粘完就废",
+
+    // ===== v2.0 新增：人格成分解析 =====
+    components: {
+      nrg: "你一进入人群就自动开启震动模式，像刚喝完三瓶假可乐。别人越看你越来劲，独处十分钟就电量报警。你的能量不是来自休息，而是来自'被看见'的那一下点头。闹累了就换个方式闹，反正不能停。",
+      rul: "你其实偷偷掰过规则，但每次都是'不小心'的。你比谁都清楚红线在哪，因为你花了大量时间观察大人的脸色。你的乖不是本性，是精确计算后的survival mode。一边陪笑一边记笔记，这就是你的日常。",
+      pre: "你站在人群边缘，但身体语言全在喊'看我！看我！'你不敢直接站C位，所以选择用粘性把自己甩到别人身上。你不是主角，但你是那个主角甩不掉的跟班。存在感靠贴，距离感靠粘。",
+      emo: "你的情绪像广场的喷泉，说来就来，说停就停。老师一眼就能看出你今天心情，因为全写在你那张没收住的脸上。你以为这是真诚，其实只是还没学会把脸绷住。哭完就笑，笑完就闹，情绪对你来说是全开放式的。"
+    },
+
+    // ===== v2.0 新增：情境剧本 =====
+    scenarios: {
+      family: "年夜饭上，你刚被爸妈说了两句'别闹'，转头就蹭到二姨怀里表演新学的顺口溜。你知道爸妈嫌你吵，但更怕的是饭桌上没人看你。二姨笑着夸你活泼，你心里偷偷数：刚才笑了几次？够吗？要不要再背一首？",
+      classroom: "新来的转学生坐在第三排，你在课间以'带你参观'为由，十分钟之内把自己的身世、喜好、以及'我跟班长很熟'全部交代完毕。你递过去一块橡皮当定情信物，心里已经排好了下周一起上厕所的日程表。",
+      social: "课间操自由活动时间，你发现昨天一起玩的人今天跟别人跳皮筋了。你站在五米外，用一声超大声的'嘿！你们在玩什么啊！'强行切入。你笑得比平时大一倍，声音比平时尖三度，像一只过度热情的麻雀。",
+      alone: "放学路上有一段要自己走。你一边踢石子一边自言自语，把刚才在学校没说够的话全部说给自己听。你跟自己玩'采访游戏'，假装有个镜头对着你。十分钟后到家门口，你已经疲惫得连'妈我回来了'都懒得大声说。",
+      crisis: "小组活动有人提议'我们不分组了，各做各的'，你的笑容僵了零点五秒，然后立刻提出'那我帮大家汇总吧！我写字快！'。你当了汇总员，实际上承担了最多的活，但至少你确定自己还在组里。"
+    },
+
+    // ===== v2.0 新增：隐藏档案 =====
+    hidden: "表面上你是最热情的那个，其实你是最怕被落下的那个。你的'粘'不是喜欢谁，是恐惧一个人。你把'被需要'当成'被爱'，把'没被甩开'当成'关系好'。你最讨厌的人可能是你自己——那个连独处都要演戏的版本。",
+
+    // ===== v2.0 新增：人格关系谱 =====
+    relations: {
+      best: {
+        code: "TNT",
+        name: "野生熊孩子",
+        reason: "你粘人，他拆家，你们在一起正好互相消耗。TNT不在乎你有多烦，他只在乎你有没有陪他一起把厕所弄堵。"
+      },
+      worst: {
+        code: "WALL",
+        name: "奖状陈列品",
+        reason: "你的热情在WALL面前像打在棉花上。你笑她点头，你哭她递纸。你们隔着一层叫'体面'的玻璃。"
+      },
+      mystery: {
+        code: "YINM",
+        name: "冷面棋手",
+        reason: "你看不懂YINM为什么能一个人坐着却不慌。你发现他根本不需要观众，这让你隐隐觉得有点不公平。"
+      }
+    },
+
+    // ===== v2.0 新增：成长预言 =====
+    prophecy: "长大后你从牛皮糖变成了可撕式便利贴。你在每个圈子里都有一个位置，上面写着'此人不重要但没法赶走'。有一天你可能遇到一个人，他真的不嫌你烦——到时候你反而不知道该贴什么了。"
+  }
+,
+  "502ER": {
+    name: "502精",
+    definition: "甩不掉的粘人精",
+    description: "你的依恋像502胶水——粘上的时候天衣无缝，撕下来的时候两败俱伤。你不懂得距离，也不接受冷淡。\n\n502胶水都没你粘得紧，但问题是，不是所有人都想被粘住。",
+    reading: "你最好的朋友已经躲到厕所了，你还在隔间外面等。你没有\"独处\"这个选项，你的存在方式就是附着。502胶水都没你粘得紧。",
+    slogan: "502胶水都没你粘得紧",
+
+    // ===== v2.0 新增：人格成分解析 =====
+    components: {
+      nrg: "你不是最吵的那个，但你是待机时间最长的那个。别人午睡你在旁边看着，别人放学你在门口等着。你的能量不是爆发式的，是渗透式的——一天二十四小时，你至少有十六小时在想'TA在干嘛'。",
+      rul: "你从来不主动破坏规则，但你有一套自己的解读方式。'老师说不可以打架'被你理解成'老师没说不能跟着'。你总是那个站在规则缝隙里的人，半只脚在里，半只脚粘在别人身上。",
+      pre: "你不是主角，甚至不是配角，你是背景里那个一直跟着主角移动的黑点。你不求站在光里，你只求站在被光照到的人的影子里。影子是你最安心的位置。存在感为零，粘度却满分。",
+      emo: "你的情绪像湖底的水草，表面上波澜不惊，下面缠成一团。别人看不出来你今天是不是不开心，因为你学会了把脸放空。但你的'放空'其实是'过载保护'——表情系统死机了。"
+    },
+
+    // ===== v2.0 新增：情境剧本 =====
+    scenarios: {
+      family: "表哥来家里住两天，你第一天就把自己最喜欢的玩具塞进他怀里，第二天发现他开始躲着你。你不明白为什么，你只是想知道他在房间里干什么、看什么书、有没有提到你。第三天表哥提前走了，你把那玩具扔进了床底。",
+      classroom: "调换座位那天，你被分到了教室最末一排。你花了整整两周，用传纸条、借东西、问作业的方式，重新建立了和前排那个人的'固定联络通道'。老师以为你在搞小动作，其实你只是在做求生连接。",
+      social: "春游分组，你以'我可以帮你们拿包'为代价，成功挤进了那个三人的小组。你全程拎着四个人的水壶，走得上气不接下气，但心里特别踏实。回到学校后那三个人又自动聚在了一起，没叫你。你站在走廊想了很久，是不是水壶拿得不够稳。",
+      alone: "你有三个备忘录，全是记别人说过的话。'小A说喜欢蓝色''小B说讨厌香菜''小C上次考砸了'。你一个人的时候就翻这些备忘录，像在复习考试。你不知道除了记住这些，自己还有什么值得被记住的地方。",
+      crisis: "你最好的朋友突然跟另一个人走了，你没有追上去问，也没有哭。你站在原地，把手里本来准备给TA的糖果慢慢塞进了自己嘴里。糖是草莓味的，但你觉得嘴里什么味道都没有。那天你比平时更早回了家。"
+    },
+
+    // ===== v2.0 新增：隐藏档案 =====
+    hidden: "表面上你是个甩不掉的影子，其实你是把'被留下'当成了人生的最高成就。你不相信有人真的喜欢你，所以你选择不给他们离开的机会。你最深的秘密是：你其实特别羡慕那些敢发脾气、敢说'我不跟你玩了'的人。",
+
+    // ===== v2.0 新增：人格关系谱 =====
+    relations: {
+      best: {
+        code: "KPBL",
+        name: "我没事型",
+        reason: "KPBL说'我没事'，其实最需要人陪。你不要求他说话，你们沉默地粘着，意外地舒服。"
+      },
+      worst: {
+        code: "IPHONE",
+        name: "人形黑洞",
+        reason: "IPHONE的能量也是黑洞级的，但他是吸，你是贴。你们靠近的结果就是：你被吸进去，连影子都不剩。"
+      },
+      mystery: {
+        code: "DAMN",
+        name: "背后冷刀",
+        reason: "你看不懂DAMN为什么明明是一个人，却好像什么都不怕。你想学，但你的生存系统不允许你那样活。"
+      }
+    },
+
+    // ===== v2.0 新增：成长预言 =====
+    prophecy: "长大后你变成了那个'随时在线'的朋友，消息秒回、群聊必接、随叫随到。你通讯录里的人很多，但紧急联系人那一栏你填了很久。你迟早要学会一个道理：502粘得太紧，粘到后头，两个东西都会坏掉。"
+  }
+,
+  "RUOK?": {
+    name: "情绪开关",
+    definition: "忽冷忽热的社交演员",
+    description: "你的情绪像一台失控的开关，今天把所有人暖化，明天把所有人冻僵。连你自己都不知道下一秒是天使还是恶魔。\n\n全看谁在看着你——这是你最真实的生存法则，也是最深的恐惧。",
+    reading: "在老师面前是天使，在同学面前是恶魔，在家长面前是受害者。你没有真实人格，你只有\"当前场景最优解\"。今天你是天使，明天你是恶魔——全看谁在看着你。",
+    slogan: "今天你是天使，明天你是恶魔——全看谁在看着你",
+
+    // ===== v2.0 新增：人格成分解析 =====
+    components: {
+      nrg: "你不是一直闹，而是一阵一阵地抽风。安静的时候像没电的玩具，突然来了劲又能掀翻屋顶。你的能量曲线没有规律，连你自己都不知道下一秒是开机还是死机。别人看你像在看一台接触不良的旧电视。",
+      rul: "你内心有个小本本记着所有的'应该'和'不应该'，但你执行起来全凭当天心情。今天觉得'讨好老师是对的'，明天就觉得'凭什么'。你不是反抗，你只是——间歇性叛逆，持续性后悔。",
+      pre: "你一半时间在角落里偷看，另一半时间在人群中间表演。没人知道你到底属于哪一边，包括你自己。你像一台信号不稳的收音机，今天在FM'看我'，明天就跳到了AM'别理我'。",
+      emo: "上一秒还在笑，下一秒就沉了脸。不是故意的，是你的情绪系统延迟太高了，外面的反应还没消化完，里面已经换台了。别人说你'忽冷忽热'，你说这是'真实'。其实你只是还没学会怎么匀速运转。"
+    },
+
+    // ===== v2.0 新增：情境剧本 =====
+    scenarios: {
+      family: "中秋节亲戚聚会，你前半场是全场最佳：表演节目、倒茶递瓜子、夸阿姨的新发型。后半场你突然缩进沙发角落，谁问都不说话。妈妈说你'没礼貌'，你想解释但懒得张嘴。其实你只是——演累了。",
+      classroom: "语文课上你主动举手读了课文，老师夸你声音好听。下节课数学，老师点你名，你站起来说\"我不会\"，声音比读课文时还大。全班笑了，你也笑了，但你的笑里有种说不清的赌气味，像是在跟什么人对赌。",
+      social: "课间你正跟两个人聊得火热，突然第三个人加入，你脸上的笑肉眼可见地僵了一下。你没走，但你不再说话了。你站在圈子边缘，心里想着'原来我不是不可替代的'，然后下一秒又嘲笑自己'你以为你是谁'。",
+      alone: "你放学路上最喜欢走的是那条有小卖部但也有围墙死角的路。前半段你可能是哼着歌的，到死角那里你会突然停下，把脸埋进围巾或者领子里，站一会儿。没有原因，也不需要原因。然后你抬起头，继续走。",
+      crisis: "班会上有人提议投票选班长，你本来在后排画画，突然冲上去说了一堆话，连自己都不知道在说什么。说完你就后悔了，但脸上还是那副'我无所谓'的表情。票数出来，你得了一票——你自己投的。"
+    },
+
+    // ===== v2.0 新增：隐藏档案 =====
+    hidden: "表面上你是最unpredictable的那个，其实你是控制感最差的那一个。你的忽冷忽热不是耍酷，是你真的不知道怎么保持同一个温度。你怕别人看透你，更怕看透之后发现——其实里面什么都没有，只有一团乱麻。",
+
+    // ===== v2.0 新增：人格关系谱 =====
+    relations: {
+      best: {
+        code: "CHAOS",
+        name: "恶作剧永动机",
+        reason: "CHAOS不在乎你今天热还是冷，他只在乎你能不能跟上他的节奏。你们俩凑在一起，学校保洁阿姨想辞职。"
+      },
+      worst: {
+        code: "KPI",
+        name: "排名奴隶",
+        reason: "KPI的人生是Excel表，你是一串乱码。他看你像系统bug，你看他像设定好的扫地机器人。"
+      },
+      mystery: {
+        code: "NEIG",
+        name: "幽灵叛徒",
+        reason: "你觉得自己够反复无常了，直到遇到NEIG。他连'反复'都没有，就是——不存在。这让你有点嫉妒。"
+      }
+    },
+
+    // ===== v2.0 新增：成长预言 =====
+    prophecy: "长大后你成了一个让人捉摸不透的成年人，老板看不透你，伴侣看不懂你。你有时候会突然想起小时候那个在围墙死角停下来的自己，然后问自己：如果当时多停一会儿，现在会不会不一样？"
+  }
+,
+  "JOKER": {
+    name: "班级小丑",
+    definition: "用出丑换关注的取悦者",
+    description: "你是班级里的氛围组，负责搞笑、活跃、填补所有尴尬的空隙。你学会了用出丑换关注，用自贬换笑声。\n\n但小丑竟是我自己？不，小丑从来就只有你自己——而且观众席上，从来没有人在等你谢幕。",
+    reading: "你是班里的气氛组，也是所有人笑完之后不记名字的那个。小丑竟是我自己？不，小丑从来就只有你自己。你负责搞笑，大家负责笑，没人负责记住你的名字。",
+    slogan: "你负责搞笑，大家负责笑，没人负责记住你的名字",
+
+    // ===== v2.0 新增：人格成分解析 =====
+    components: {
+      nrg: "你的电池跟别人反着装的——越有人看，你越来劲。一个眼神就能让你续航三小时。你人生最大的噩梦不是考试，是讲台上那句'下面请安静自习'。安静？那我还活不活了？",
+      rul: "你以为自己在反抗权威，其实你从没真正越过那条线。你的'坏'是老师能原谅的那种坏，你的'闹'是家长能忍受的那种闹。你不敢真的造反，你只敢在笼子里面翻跟头。",
+      pre: "你不是想站在中间，你是必须站在中间。被看见不是你的偏好，是你的氧气。你可以是被嘲笑的对象，但不能是被忽略的背景。存在感对你来说，劣质也好过没有。",
+      emo: "你的情绪挂在脸上、摊在手上、摔在地上。开心就笑到倒地，难过就垮到尘埃里。不是你不会控制，是你发现——失控比控制更能吸引目光。慢慢的，你连自己真的在笑还是假笑都分不清了。"
+    },
+
+    // ===== v2.0 新增：情境剧本 =====
+    scenarios: {
+      family: "年夜饭上大人聊天没你份，你把整盘饺子馅假装扣在头上，全场尖叫后大笑。二姨说你'活宝'，你bows了个不标准的躬。回房间后你对着镜子练习了三次那个表情，确保下次还能做出一样的效果。",
+      classroom: "数学课你故意把'7+8'答成'78'，全班爆笑，老师瞪你一眼但没真生气。你坐下的时候心跳还在加速——不是因为害怕，是因为刚才那三十秒，所有人都在看你。那种感觉比答对一百道题都爽得多。",
+      social: "体育课上有人摔了一跤，所有人看过去的时候，你当场也模仿了一个更夸张的摔倒。大家的注意力从那个人身上移到了你这里。你趴在地上傻笑，心里其实在数：刚才大概十几个人笑了？够了吗？",
+      alone: "放学路上没人看的时候，你走路姿势正常得像个陌生人。你不搞怪、不大声、甚至不怎么说话。路过商店的玻璃门，你瞥了一眼镜子里的自己——那个安静的人是你吗？你赶紧做了个鬼脸，把自己吓醒了。",
+      crisis: "班会上班长严肃地批评纪律问题，你突然插了一句嘴，全场哄笑。班长的脸绿了，你的脸在笑，但心里咯噔了一下——这次好像有点过头了。但你看向周围笑着的同学，那种咯噔的感觉很快就被盖过去了。"
+    },
+
+    // ===== v2.0 新增：隐藏档案 =====
+    hidden: "表面上你是最不怕出丑的那个，其实你是最怕不被看见的那个。你的每一次搞怪都是一笔交易：我给你笑料，你给我目光。你不知道除了当小丑，还有什么方式能让人喜欢你。最惨的是——你开始怀疑，大家笑的时候，真的喜欢你吗？",
+
+    // ===== v2.0 新增：人格关系谱 =====
+    relations: {
+      best: {
+        code: "NUKE",
+        name: "闷声大雷",
+        reason: "NUKE需要掩护，你需要观众，你们是天生的搭档。他在后面搞事，你在前面吸引火力，配合得天衣无缝。"
+      },
+      worst: {
+        code: "CTRLC",
+        name: "赝品小孩",
+        reason: "CTRLC拼命想当'正常小孩'，你把'不正常'演成主角。你看他像扭曲镜子，他看你是噩梦。"
+      },
+      mystery: {
+        code: "STEAM",
+        name: "冷静钻头",
+        reason: "你看不懂STEAM怎么能一声不吭就拿到一切。你闹翻天才能换来的，他安静坐着就有了。这让你恨他。"
+      }
+    },
+
+    // ===== v2.0 新增：成长预言 =====
+    prophecy: "长大后你变成了那个群里最会接梗、酒桌上最能活跃气氛的人。你有很多'朋友'，但很少有人在深夜给你打电话。你迟早会发现，用尊严换来的注意力，通货膨胀得厉害。问题是——到时候你还会别的吗？"
+  }
+,
+  "MAPI": {
+    name: "老师爱宠",
+    definition: "奴才当了领导",
+    description: "你是老师最信任的耳目，也是同学最不想同桌的存在。你享受特权，也承受孤立——这是一笔你从未同意却不得不接受的买卖。\n\n你站在权力的一边，但权力从来不站在你这边。",
+    reading: "你天生会组织，会指挥，会报告——而且你发自内心觉得\"听话\"和\"领导\"不矛盾。你是系统培养出的最佳代理人。你是老师最信任的耳目，也是同学最不想同桌的存在。",
+    slogan: "你是老师最信任的耳目，也是同学最不想同桌的存在",
+
+    // ===== v2.0 新增：人格成分解析 =====
+    components: {
+      nrg: "你的一切行动都以'获得回应'为燃料。老师的点头、班长的默认、同学的求助——都是你的充电桩。你不是在做事，你是在收集'被需要'的证明。一天没人找你，你就觉得世界在漏风。",
+      rul: "你是规则的优等生，但不是因为认同，是因为你发现了规则的漏洞——听话可以换权力。你比谁都守规矩，因为你比谁都清楚：守规矩的人，才有资格在规矩里钻空子。你的乖是一种投资。",
+      pre: "你不站C位，你站C位旁边一步——那是既能被看见、又不用承担主要责任的最佳位置。老师夸人的时候你在旁边微笑，老师批评的时候你刚好不在。这个位置是你精密计算过的。",
+      emo: "你的情绪系统被你自己手动静音了。不是因为没感觉，是因为有感觉太危险了。你在心里建了一个密室，所有的委屈、愤怒、嫉妒都关在里面。表面上看，你永远情绪稳定——稳定得像一潭死水。"
+    },
+
+    // ===== v2.0 新增：情境剧本 =====
+    scenarios: {
+      family: "亲戚来家里，你主动倒茶、摆水果、问'阿姨喝不喝水'。妈妈夸你懂事，你低头笑了笑。其实你只是提前观察了大人喜欢什么，然后按剧本演了一遍。你不知道自己真的想不想倒那杯茶，但你确定不倒的话后果更严重。",
+      classroom: "老师问谁愿意当小组长，你没有第一个举手——你等了两秒，确认举手的人不多，才缓缓把手举到'能被看见但不显得积极'的高度。你当上了小组长，第一件事就是把最累的活分给那个最好说话的人。",
+      social: "课间有人吵架，你以'我去告诉老师'为由离开了现场。你不是真的要去告老师，你只是不想站队。你在走廊里转了两圈，估摸着吵完了才回去，然后对两边都说'哎呀算了算了'，拍了拍各自的肩膀。",
+      alone: "你在日记本里写的是今天帮老师收了几次作业、谁跟你说话了、谁没理你。你不会写'我今天很难过'，因为那个'你'不在你的记录系统里。写日记对你来说是台账，不是倾诉的地方，一笔一划都是账。",
+      crisis: "班级投票选三好学生，你提前三天就开始'不经意'地帮同学一些小忙：借橡皮、提醒作业、夸人家的新笔袋。投票那天你得票第二——不是第一，这让你有点不安，但第二也是安全位置，你安慰自己。"
+    },
+
+    // ===== v2.0 新增：隐藏档案 =====
+    hidden: "表面上你是老师的得力助手、同学的热心班干，其实你是权力的实习生。你的每一次帮忙都记着账，每一次微笑都标着价。你最恨的不是那些不听话的人，是那些明明不听话却能被喜欢的人——因为你做不到。",
+
+    // ===== v2.0 新增：人格关系谱 =====
+    relations: {
+      best: {
+        code: "DAREN",
+        name: "实习大人",
+        reason: "DAREN也在装大人，你们两个实习生凑在一起，交换情报、共享剧本。像两个间谍的下午茶，虚伪但高效。"
+      },
+      worst: {
+        code: "GODD",
+        name: "暴动领袖",
+        reason: "GODD看穿了你的所有把戏，不屑戳穿，只会在关键时刻让你下不来台。你是秩序的寄生虫，他是破坏者。"
+      },
+      mystery: {
+        code: "BOSS",
+        name: "混沌魔王",
+        reason: "你觉得自己懂权力，直到遇到BOSS。他的统治不需要讨好任何人，你连小团体都维持得累死。"
+      }
+    },
+
+    // ===== v2.0 新增：成长预言 =====
+    prophecy: "长大后你进入任何有层级的组织，都能迅速找到自己的位置。你是领导最喜欢、同事最提防的人。你攒了很多'好人卡'，但不知道哪张能兑现。有一天你可能厌倦这个游戏——但那时候你已经忘了怎么不玩。"
+  }
+,
+  "TRUMP": {
+    name: "儿童政客",
+    definition: "幼儿园就是小社会",
+    description: "你在操场上就学会了拉票、结盟、搞小团体。你懂得权力的游戏规则，而且玩得不比任何成年人差。\n\nMake Playground Great Again——虽然你并不确定这个操场曾经好在哪里。",
+    reading: "你才八岁，已经懂得结盟、背叛、舆论操控和利益交换。你的童年是《纸牌屋》少儿版，而且你没有编剧。你才八岁，已经懂得结盟、背叛和舆论操控。Make Playground Great Again。",
+    slogan: "Make Playground Great Again",
+
+    // ===== v2.0 新增：人格成分解析 =====
+    components: {
+      nrg: "你不是一个人，你是一个竞选团队。你的每一个动作都有目标受众，每一次出场都有传播策略。独处对你来说是'民调低谷期'，人多的地方才是你的基本盘。你从不在没有观众的场合浪费能量。",
+      rul: "你是最早理解'规则是给人看的，不是给人遵守的'这句话的人。你不破坏规则，你利用规则。告老师不是为了正义，是为了让对手出局。你的顺毛不是怂，是成本最低的进攻方式。",
+      pre: "你的C位不一定要站在中间，有时候站在旁边更能控制全场。你发现了权力的秘密：真正的C位不是被看见，而是能决定谁被看见。你开始练习这门手艺的时候，同龄人还在玩泥巴。",
+      emo: "你的情绪不是情绪，是工具。今天可以为一个哭得一塌糊涂的同学'主持公道'，明天可以面不改色地冷落同一个人。你的情绪表达全部是策略性的，连你自己都分不清哪次是真的。"
+    },
+
+    // ===== v2.0 新增：情境剧本 =====
+    scenarios: {
+      family: "年夜饭上，你同时在三拨人之间周旋：帮奶奶捶背获取长辈阵营好感、跟表哥聊游戏拉近同辈距离、适时插嘴大人话题展示'成熟'。一顿饭吃下来你比上课还累，但你的'支持率'在心里涨了不少。",
+      classroom: "小组作业有人没干活，你当着老师的面说'可能是他家里有事吧'，语气里的怜悯比指责还致命。老师看了那人一眼，那人百口莫辩。你拿到了组长的加分，还落了个'善解人意'的评价，双赢。",
+      social: "课间你看到A和B在秘密说话，你分别对C和D说'听说A和B在说你们的事'，然后坐在一旁观察连锁反应。十分钟后C和D去找A和B对峙，你在旁边'劝架'，成了唯一一个和四边都保持友好的人，滴水不漏。",
+      alone: "你一个人的时候会复盘今天的'社交战绩'：谁跟谁结盟了、谁失信了、明天的舆论走向。你很少想'我今天开心吗'，因为这个问题不在你的KPI体系里。你对着镜子练习了三种笑容，确保明天用对场景。",
+      crisis: "班上有东西丢了，所有人都看向你的时候——因为大家都知道你消息最灵通——你没有急着辩解，而是提出了一个'让大家都参与搜书包'的方案。东西后来在你的提议下'找到了'，你成了拯救班级公信力的人。"
+    },
+
+    // ===== v2.0 新增：隐藏档案 =====
+    hidden: "表面上你是幼儿园/小学里的社交大师、人情练达的小天才，其实你是最早放弃'真实'的那个人。你把所有人都当选民，把自己当候选人，却忘了问一个问题：如果不需要拉票，你到底是谁？",
+
+    // ===== v2.0 新增：人格关系谱 =====
+    relations: {
+      best: {
+        code: "STUDY",
+        name: "聪明反骨",
+        reason: "STUDY有脑子懒得用，你有野心需要脑子。你们像有谋略的将军和只想赢的王子，各取所需。"
+      },
+      worst: {
+        code: "IMOK",
+        name: "我很好型",
+        reason: "IMOK的'我很好'是真的，你的是竞选口号。他不需要拉票就能被喜欢，这对你是种侮辱。"
+      },
+      mystery: {
+        code: "ELON",
+        name: "暴君幼体",
+        reason: "你费尽心机建的关系网，ELON一句话就能撕碎。你不懂他为什么不需要讨好任何人，却能让别人怕他。"
+      }
+    },
+
+    // ===== v2.0 新增：成长预言 =====
+    prophecy: "长大后你可能是学生会主席、销售冠军，或任何需要'搞定人'的岗位。你的通讯录是分层的，朋友圈是经营的。你很少有真正的朋友。某天深夜你可能想：抛开这些，还会有人找我吗？然后你把这念头压下去，继续睡。"
+  }
+,
+  "CHAOS": {
+    name: "恶作剧永动机",
+    definition: "偷着搞破坏，暗爽型",
+    description: "你是行走的混沌本身，所到之处秩序自动瓦解。你不是故意搞破坏——你只是控制不住体内那台永动机。\n\n橡皮擦被切成碎屑、同桌的椅子少了颗螺丝、黑板上莫名多出一幅画……你总是最后一个被怀疑，第一个笑出声的人。",
+    reading: "你把同桌的橡皮切成二十块，然后假装在看书。快乐建立在他人的微小痛苦上——而你甚至不需要观众。你是行走的混沌本身，所到之处秩序自动瓦解。",
+    slogan: "你是行走的混沌本身，所到之处秩序自动瓦解",
+
+    // ===== v2.0 新增：人格成分解析 =====
+    components: {
+      nrg: "你的电池是冷却系统坏掉的核反应堆，越惹事越精神。老师越生气你笑得越开心，闯完祸晚上躲被窝里复盘细节还会笑出声。制造小型混乱、看大人表情崩坏，是你最早的娱乐项目。",
+      rul: "规则对你而言是待拆的玩具包装。你研究守则的漏洞，'不许跑动'你能研究出快走、小跳、滑步三种替代方案。每次绕过规则没被抓到，那种快感比考满分还爽十倍。",
+      pre: "你不是不想当主角，是发现当幕后黑手更有趣。站在人群边缘看着自己的恶作剧一圈圈扩散，这种遥控感让你上瘾。你是往池塘扔石子的人，享受的是涟漪。",
+      emo: "情绪来得快、响度大、去得也快。没有隔夜仇，因为有仇当场就报了。你的情绪像夏天雷阵雨，看着吓人，但真正的破坏力在于来得毫无征兆。"
+    },
+
+    // ===== v2.0 新增：情境剧本 =====
+    scenarios: {
+      family: "年夜饭亲戚问成绩，你突然开口：'叔叔，你儿子上次谈恋爱被发现了你知道吗？'满桌寂静中你低头扒饭，嘴角压不住，红烧肉的油顺着筷子滴进白米饭里。你妈在桌下狠掐你大腿，你面不改色又夹了一块。",
+      classroom: "数学课上老师背过身板书，你从口袋摸出橡皮筋和纸团。第一发命中前排小胖后脑勺，他龇牙咧嘴又不敢出声。第二发打中班长马尾辫皮筋，她啊地一叫。老师转身质问时你已正襟危坐，纸团早就弹进了垃圾桶。",
+      social: "课间操后人流涌向教学楼，你'不小心'把消防栓玻璃门推开一道缝，站在三楼走廊看下面。第一个男生撞上去骂脏话，第五个人时已形成小规模拥堵。教导主任冲出来时，你早就在教室里翻开英语课本了。",
+      alone: "放学回家爸妈没下班，你把家里翻个底朝天。拆过遥控器、闹钟、妈妈化妆品盒子。有一次把爸爸剃须刀装回去多了两个零件，你觉得运转得更好了。茶几上那圈说不清来历的划痕，是你测试木头硬度的科学实验。",
+      crisis: "同桌被大个子堵在厕所门口，你晃过来手里转着粉笔头。大个子让你滚，你说'教导主任往这边走了'。趁他回头那半秒，你把粉笔灰倒进他衣领。走廊里回荡着嚎叫和笑声，你拽着同桌跑得飞快。"
+    },
+
+    // ===== v2.0 新增：隐藏档案 =====
+    hidden: "表面你是麻烦制造机，其实你比谁都清楚边界在哪——从不触碰真正底线，每个恶作剧都经精密计算。你不是失控，你只是假装失控。真相是：你太在意这个世界了，搞破坏是你确认'我还活着、还能影响些什么'的唯一方式。",
+
+    // ===== v2.0 新增：人格关系谱 =====
+    relations: {
+      best: {
+        code: "JOKER",
+        name: "班级小丑",
+        reason: "他前台表演吸引注意力，你后台操作全局。一个逗笑全场一个搞乱全场，联手能让一节课变成狂欢。"
+      },
+      worst: {
+        code: "WALL",
+        name: "奖状陈列品",
+        reason: "他活着为维护规则正确性，你活着为证明规则可笑。对视一眼都觉得对方可悲。"
+      },
+      mystery: {
+        code: "NUKE",
+        name: "闷声大雷",
+        reason: "你搞完事全世界知道，他憋到极限来次核爆。你理解不了沉默里的危险，就像他理解不了你为什么还没被打死。"
+      }
+    },
+
+    // ===== v2.0 新增：成长预言 =====
+    prophecy: "长大后你会变成会议上说'我觉得可以换个思路'的人，看着领导脸色变青。也许会创业，受不了被人管；也许成为让人又爱又恨的创意总监。唯一确定的是：你这辈子都坐不住。三十岁某深夜，想起粉笔头的抛物线，你会笑出声。"
+  }
+,
+  "STEAM": {
+    name: "冷静钻头",
+    definition: "面无表情拆家",
+    description: "你不生气，你只是冷静地把遥控器拆了，然后装不回去。你的破坏有一种工程师般的精确——没有情绪，只有好奇。\n\n大人以为你在搞破坏，但你知道自己只是在探索事物的内部结构。",
+    reading: "你不生气，不激动，你只是冷静地把遥控器拆了，再冷静地组装成一个你看不懂的东西。理工天才，从小开始。你不生气，你只是冷静地把遥控器拆了，然后装不回去。",
+    slogan: "你不生气，你只是冷静地把遥控器拆了，然后装不回去",
+
+    // ===== v2.0 新增：人格成分解析 =====
+    components: {
+      nrg: "你的安静不是没电，是把所有电量供给CPU。上课时看起来像发呆，其实在心算如何把吊灯弄下来不被发现。越安静，说明脑子转得越狠，策划越精密。",
+      rul: "你对规则是技术性蔑视。发现班主任查岗精确间隔十七分钟，知道哪扇窗户锁是坏的，总结出值日生巡逻路线。你不反抗规则，你绕过它，像水绕过石头。",
+      pre: "你是教室角落的幽灵，拒绝参与visibility竞争。别人举手发言你在观察，别人争表现你在记录。存在感低得恰到好处：老师记不住你名字，但每个计划都精准落地。",
+      emo: "你有一张情绪空白脸。高兴看不出来，生气也看不出来，只有你自己知道内心在进行什么运算。偶尔露出的微笑往往意味着'这个计划很完美'，而不是'我很开心'。"
+    },
+
+    // ===== v2.0 新增：情境剧本 =====
+    scenarios: {
+      family: "亲戚围着问排名，你淡淡开口：'年级第三十七，比上次退八名，主要原因是数学题太简单拉不开差距。'一脸诚恳。空气凝固五秒，你爸打岔说吃饭吃饭。你在心里打满分——这回答能让她们议论半小时，没人来烦你了。",
+      classroom: "分组做电路实验，你们组灯泡怎么都不亮。三个组员急得像热锅蚂蚁，你坐旁边看了两分钟，伸手把一根线从A孔拔出来插进B孔。灯泡亮了。你没说话——其实一早就知道问题在哪，只是想看看他们会笨多久。那个时间长度被你记在心里，标注为'人类平均水平'。",
+      social: "一群男生争论哪种冰棍最好吃，吵了十分钟没结论，有人问你选什么。你说'香草'，所有人愣住，因为冰工厂根本没有香草味。你转身走了。你不关心冰棍，只是喜欢制造一个别人反应不过来的切口。",
+      alone: "放学后教室空了，你回去取书包时会做一件事：走到讲台打开粉笔盒，把最长的那根和最短的调换位置。然后离开，不说、不想、不回味。这个行为没有意义，但对你来说是确认'世界可以被微调'的仪式。",
+      crisis: "两个男生因篮球场地打起来，围观人群越聚越多。你从人群中穿过去，说一句：'教导处的车进校门了，大概两分钟到篮球场。'两人同时松手。没人知道你是不是真的看到了车，但也没人敢赌。你捡起滚到脚边的篮球，投篮，空心入网。"
+    },
+
+    // ===== v2.0 新增：隐藏档案 =====
+    hidden: "表面你冷得像冰，对所有事漠不关心。其实你的冷漠是过载保护。你观察太细、想得太深，不把自己调成静音模式，会被世界噪音逼疯。你不是没有感情，是感情系统处理速度跟不上输入流速。那些面无表情的时刻，你其实在努力不被淹没。",
+
+    // ===== v2.0 新增：人格关系谱 =====
+    relations: {
+      best: {
+        code: "STUDY",
+        name: "聪明反骨",
+        reason: "他用头脑质疑一切，你用冷静手段执行一切。一个出脑子一个出手，联手可以解构整个学校的权力体系。"
+      },
+      worst: {
+        code: "GLUE",
+        name: "人形牛皮糖",
+        reason: "他黏人讨好情绪外露，每一样都在你雷区蹦迪。你对他的黏糊毫无办法，冷漠在他眼里只是欲拒还迎。"
+      },
+      mystery: {
+        code: "KPI",
+        name: "排名奴隶",
+        reason: "他把排名当氧气，你视排名如无物。你理解不了人为数字焦虑的逻辑，就像他理解不了你为什么能考好却不在乎。"
+      }
+    },
+
+    // ===== v2.0 新增：成长预言 =====
+    prophecy: "你会变成工程师、外科医生、或需要极度冷静的职业。人们夸你'泰山崩于前而色不变'，只有你知道那不是修养，是从小练的降噪。三十五岁某深夜，你突然想大笑大哭，却发现表情管理早已内嵌成系统，悲伤只能后台静默运行。"
+  }
+,
+  "IPHONE": {
+    name: "人形黑洞",
+    definition: "你永远不知道他在计划什么",
+    description: "你不说话，你不表情，你只是盯着人看。然后东西就坏了。你是班级里最神秘的存在——没人知道你在想什么，但所有人都感觉到某种压力。\n\n你的内心世界像黑洞一样深不可测，连光都逃不出来。",
+    reading: "你不说话，你不表情，你只是盯着人看。然后突然做了一件事——没人知道为什么，包括你自己。你不说话，你不表情，你只是盯着人看。然后东西就坏了。",
+    slogan: "你不说话，你不表情，你只是盯着人看。然后东西就坏了",
+
+    // ===== v2.0 新增：人格成分解析 =====
+    components: {
+      nrg: "表面安静得出奇，但周围一切都被你缓慢吸入。别人闹哄哄时你在角落做自己的事，奇怪的是最终大家都围到你身边。你不需要主动发光，引力就是让人不自觉靠近，然后在合适时机一击致命。",
+      rul: "规则是别人的游戏说明书，你既不崇拜也不愤怒，只是不认为自己需要遵守。被发现就认罚，态度好得让人挑不出毛病，但下次该干嘛还干嘛。你能让规则执行者觉得自己赢了，同时你也没输。",
+      pre: "你像未读消息的红点——存在感不高，但总让人忍不住想点。不争C位，但站的地方莫名其妙就成了中心。可能因为你脸上永远挂着'我知道一些你不知道的事'的表情。",
+      emo: "今天是全班开心果，明天是拒绝和任何人说话的冰山。切换毫无预警，连你自己都说不清楚触发条件。你以为这叫随性，别人觉得这叫危险。正因为unpredict，大家反而更想预测你——你成了他们脑海里的常驻APP。"
+    },
+
+    // ===== v2.0 新增：情境剧本 =====
+    scenarios: {
+      family: "亲戚聚会上你妈让你背诗，你用诡异抑扬顿挫念了三分钟关于黑洞和蚂蚁的哲学。全场鼓掌，没人听懂。你坐下继续玩手机。其实你自己也不知道写的啥，但你知道'认真说胡话'的戏剧效果。",
+      classroom: "周一早自习班长收作业，你递过去一本空白练习册，非常平静地说：'我爸周末出差了，我妈不会检查作业，所以我没写。'班长不知如何处理这种过于诚实的坦白，把你记在未交名单上。你看着她写，一点不慌——你知道班主任今天请假，代课老师根本不会看名单。",
+      social: "三个同学讨论周末去哪玩，没人问你。讨论白热化时你突然抬头：'密室逃脱吧，我叔叔新开了一家。'空气静止两秒，然后所有人开始问地址、价格、难度。你给一半留一半，最终成了组队核心——尽管一开始根本没人打算叫你。",
+      alone: "一个人在家，你会做一件无观众时才有意义的事：把客厅所有家具位置挪动五厘米，然后拍张照。有一次你花整整一下午，把家里所有钟表调快七分钟，看着爸妈在错误时间里生活了一周才被骂。你真正在乎的是：你偷偷掌控了家里的时间流速。",
+      crisis: "班上传你偷班费。下午班会班主任问起，你在全班注视下站起来，掏出一串钥匙放讲台上：「这是班费柜的备用钥匙，上周就丢了，我刚找到。」然后坐下继续看书。你早知道谁在搞事，只是等到最佳时机才出手反击。"
+    },
+
+    // ===== v2.0 新增：隐藏档案 =====
+    hidden: "表面你unpredict让人捉摸不透。其实你有非常固定的内在逻辑，只是逻辑链条太长，外人跟不上。你不是随机，是加密了。每个看似发疯的行为背后都有严密因果推演，只是你从不说出口。最心酸的是：你之所以保持神秘，是因为试过被看透，而被误解其实更可怕。",
+
+    // ===== v2.0 新增：人格关系谱 =====
+    relations: {
+      best: {
+        code: "NEIG",
+        name: "幽灵叛徒",
+        reason: "他潜伏人群暗中背叛，你暗中操控。都不需要被理解，只需要被关注。一个暗处捅刀一个明处设局，配合默契。"
+      },
+      worst: {
+        code: "RUOK?",
+        name: "情绪开关",
+        reason: "她情绪全写在脸上，需要帮助、需要回应、需要被看见。你最烦这种'必须接招'的互动，她越渴望连接你越往后退。"
+      },
+      mystery: {
+        code: "IMOK",
+        name: "我很好型",
+        reason: "他嘴上没事，行为也真的没事。标准好孩子，零意外值。你理解不了表里如一的人生怎么运作的，像外星文明。"
+      }
+    },
+
+    // ===== v2.0 新增：成长预言 =====
+    prophecy: "成为产品经理、战略顾问、或吃人性饭的人。擅长发现隐藏模式，让人照你想法走不自知。unpredict是双刃剑——让你迷人又孤独。四十岁遇到不需表演的人，不知如何相处。也许那就是成长，也许不是。"
+  }
+,
+  "BOSS": {
+    name: "混沌魔王",
+    definition: "全场破坏王，行走的灾难",
+    description: "你是最终Boss，出场自带灾难片BGM。你不是在搞破坏，你是在搞艺术——用混乱做画布，用规则做颜料。\n\n所有班规在你面前都是建议，所有老师的耐心都是你的经验值。你存在的意义，就是让平静的校园多一点波澜。",
+    reading: "你不是故意的，你只是一出现，秩序就死了。老师看到你的背影就头疼，家长看到你的成绩单就沉默。你不是故意的，你只是一出现，秩序就死了。你是最终Boss，出场自带灾难片BGM。",
+    slogan: "你是最终Boss，出场自带灾难片BGM",
+
+    // ===== v2.0 新增：人格成分解析 =====
+    components: {
+      nrg: "出厂设置里没有省电模式。醒着就在放电，老师看你头疼，同学看你兴奋或害怕，没有中间态。存在感是物理现象——进教室，温度、音量、紧张度至少一个飙升。",
+      rul: "规则在你面前不是纸，是空气。'不许'两个字是你的起跑枪声，越禁止越要试。你有丰富的被惩罚经验，但惩罚对你无效——已纳入行为成本，算进每次冒险预算。你是罚站还能跟走廊同学打招呼的人。",
+      pre: "你天生该站C位，不是喜欢，是其他位置也成焦点。试过低调，结果低调本身就显眼。存在是霸占——不需申请，不需许可。灯光找不到你，你自己带手电筒。",
+      emo: "你的情绪是全景声外放。开心大笑，不爽翻脸，委屈了全走廊都听见。有人劝你控制，你觉得在劝你阉割。这种暴烈让你朋友多也树敌多，但你不在乎——所有人都记得你。"
+    },
+
+    // ===== v2.0 新增：情境剧本 =====
+    scenarios: {
+      family: "大年三十全家看春晚，你说小品好无聊。爷爷瞪你，你没闭嘴，还站起来模仿小品演员——加了改编。cousins憋笑到内伤，爷爷气得用筷子敲桌子。你爸让你回房间反省，你走时顺手把电视音量调到四十二。回房间耳朵贴门上听动静，笑容咧到耳根。",
+      classroom: "语文老师让大家安静写作文，你突然把笔摔桌上，全班抬头。你一脸认真说作文题目有问题，开始论述'我的梦想'如何限制青少年多元发展。老师试图打断你三次都失败，最终让你去走廊冷静。你走出教室时对全班比了个耶，有一半人偷偷回比了。",
+      social: "食堂排队有人插你前面。你没忍，也没告诉老师。直接站到他面前，用全食堂都听得见的声音说：'你是不是视力不好看不见队尾？'那人脸涨通红想发作但所有人都在看，最终灰溜溜走了。你端着餐盘找座位时，三拨不同的人邀请你坐他们那桌。",
+      alone: "周末爸妈加班，一个人在家。你把所有能发声的东西找出来，设定不同时间发声：七点半微波炉'叮'，七点三十五分洗衣机嗡起来，七点四十分拿衣架敲三下暖气管道。然后坐沙发上，想象楼下邻居疑惑的表情。一个人也可以制造chaos，这是你的独处哲学。",
+      crisis: "运动会接力赛，隔壁班最后一棒故意撞了你们班选手，裁判判对方赢。你们班围住裁判理论，你直接走过去对裁判说：「规则第七条，恶意阻挡取消成绩。你说不是恶意，那你解释下他为什么变道三米来撞人？」全场安静。"
+    },
+
+    // ===== v2.0 新增：隐藏档案 =====
+    hidden: "表面你不可一世，走到哪破坏到哪，像没有大脑的台风。其实你的chaos经过授权——你测试边界是因为没人认真告诉过你边界在哪。最委屈的是，当你偶尔安静坐着，大家反而问「你今天怎么了」。连安静都被当成一种破坏，这谁受得了啊。",
+
+    // ===== v2.0 新增：人格关系谱 =====
+    relations: {
+      best: {
+        code: "GODD",
+        name: "暴动领袖",
+        reason: "他组织反抗，你制造混乱，相遇就是革命。一个战略家一个冲锋队，一起能把学校掀个底朝天。"
+      },
+      worst: {
+        code: "CTRLC",
+        name: "赝品小孩",
+        reason: "他拼命装乖，你拼命不乖。对立的两极，但都戴着面具活着。你看不起他的虚伪，他害怕你的真实。"
+      },
+      mystery: {
+        code: "502ER",
+        name: "502精",
+        reason: "他黏人讨好把所有人当救命稻草。想推开他，粘得更紧。你理解不了这种生存策略，就像他理解不了你顶撞老师。"
+      }
+    },
+
+    // ===== v2.0 新增：成长预言 =====
+    prophecy: "你会成为带气氛的人——leader、组织者、或需感染力的角色。C位本能在职场发光，代价是永不停歇。四十岁后某凌晨，你会问：没人看我，我还存在吗？这问题困扰你很久，也可能某天有了答案。那时你会更温柔——不是变了，是终于敢了。"
+  }
+,
+  "YINM": {
+    name: "冷面棋手",
+    definition: "冷静布局，带着大家造反",
+    description: "你今天让全班罢课，明天让家长联名上书——全是计划。你像下棋一样操控局势，每一步都精确到毫米。\n\n你是冷面棋手，所有同学都是你的棋子。问题是，棋盘上的其他人，根本不知道自己在被下。",
+    reading: "你不乱来，你每一步都是计算过的。今天你让全班罢课，明天你让家长联名上书。你是冷面领袖，儿童版凯撒。你今天让全班罢课，明天让家长联名上书——全是计划。",
+    slogan: "你今天让全班罢课，明天让家长联名上书——全是计划",
+
+    // ===== v2.0 新增：人格成分解析 =====
+    components: {
+      nrg: "你的能量是暗物质——看不见，但引力惊人。不吵不闹，但班级人际网络你比谁都清楚。谁和谁有矛盾、老师弱点是什么，像数据一样自动归档。别人觉得你冷，其实只是把热情省给真正重要的事了。",
+      rul: "你对规则居高临下：不是反抗，是借用。在守则里找最有利条款保护自己，用灰色地带作为谈判筹码。老师觉得你讲理，同学觉得你有手段。你早早发现：与其做规则囚徒，不如做规则解释者。",
+      pre: "你必须在中心位置，但不是站在台上，是坐在棋盘后面。你喜欢当'大家都知道可以找他拿主意'的人。存在感建立在权威上——你说一句话别人会认真听，因为你知道太多、说得太少。",
+      emo: "你的情绪lake深得看不见底。外人只能看到水面纹丝不动，不知道底下有没有暗流。你觉得暴露情绪是示弱，而示弱是策略性错误。处理情绪的方式不是倾诉是分析——把感受拆成变量，逐个评估，然后归档。"
+    },
+
+    // ===== v2.0 新增：情境剧本 =====
+    scenarios: {
+      family: "亲戚问东问西，你妈都不好意思挡。你平静地看着问你排名的叔叔说：'叔叔，你儿子在XX中学吧？听说他们最近在查借读生。'叔叔表情变了，话题立刻转移。筹码不需要是真的，只需要听起来像真的。",
+      classroom: "小组作业分到全班最懒的三个人。你摸清底细：A要面子、B想抄作业、C怕老师。分配：A上台汇报、B整理文档、C催进度。最终你们组最高分。三人都觉得自己赚了，只有你知道真正干活的还是你自己。",
+      social: "两个朋友闹矛盾分别来找你诉苦。你没选边站，而是给每个人讲了对方'其实不是那个意思'的解释——两份内容不一样，但都恰好能让听的人消气。三天后他们和好了请你吃饭，你去了，但心里清楚：他们和好的不是彼此，是你编的那两个故事。",
+      alone: "一个人在家，你会打开班级群聊往上翻一两个月记录，画关系图。谁在什么时间说了什么、谁附和了谁、谁在谁没说话时突然沉默。用不同颜色笔标记，有时发现连当事人自己都没意识到的模式。你享受这种'比他们自己更了解他们'的感觉。",
+      crisis: "班主任要选班级代表参加枯燥讲座，所有人低头装死。你举手说：'让班长去吧，她上次不是说想多参加活动锻炼自己吗？'班长目瞪口呆，老师点点头。学习委员感激看你，班长怨恨看你，你都收下。你保护了一个，牺牲了另一个，都是计算好的。"
+    },
+
+    // ===== v2.0 新增：隐藏档案 =====
+    hidden: "表面你是冷酷的操控者，所有人都是棋子。其实你太早看懂了人际关系的脆弱，于是选择先下手为强。你不是没有在乎的人，只是你表达在乎的方式是替他们做决定罢了。控制不是权力欲，是你唯一知道的安全感形状。",
+
+    // ===== v2.0 新增：人格关系谱 =====
+    relations: {
+      best: {
+        code: "TNT",
+        name: "野生熊孩子",
+        reason: "他冲锋陷阵制造混乱，你在后方策划指挥。一个点火一个浇油，配合默契。他以为自由发挥，每步在你棋盘里。"
+      },
+      worst: {
+        code: "MAPI",
+        name: "老师爱宠",
+        reason: "她是体制既得利益者，你是体制地下拆解者。她靠讨好老师获得地位，你靠操控人心获权力。两种路径天然敌对。"
+      },
+      mystery: {
+        code: "DAREN",
+        name: "实习大人",
+        reason: "他急着长大、急着成熟、急着证明自己懂事。你觉得这种迫不及待暴露位置——真正成熟不需表演，而他演得太用力。"
+      }
+    },
+
+    // ===== v2.0 新增：成长预言 =====
+    prophecy: "你成为擅长'让人做事'的人——管理者、创业者、或需协调资源的角色。布局能力在成年更可怕，世界规则复杂、灰色更多。警告：你可能某天醒来发现，身边没一个可'不算计'的人。chess下久了忘了normal聊天。五十岁学会'不布局'，才是赢局。"
+  }
+,
+  "ELON": {
+    name: "暴君幼体",
+    definition: "Charismatic 但危险",
+    description: "你有一种危险的领袖魅力——让人想追随你，也让人害怕你。你的梦想很大，手段很硬，底线很模糊。\n\n历史书上的暴君，小时候都长你这样。只不过现在的你，还只统治着一个班级。",
+    reading: "你才十岁，已经有人愿意为你去死（或去偷试卷）。你不是孩子王，你是幼年版独裁者。历史书上的暴君，小时候都长你这样。",
+    slogan: "历史书上的暴君，小时候都长你这样",
+
+    // ===== v2.0 新增：人格成分解析 =====
+    components: {
+      nrg: "你身上有不属于儿童的能量密度。别的孩子还在学表达自己，你已掌握如何让别人为你表达。你说的话不多，但每句都有人记住并传播。你的魅力是物理现象——有人被你吸引，有人被你吓退，但没人对你无感。",
+      rul: "规则对你来说是低维度的约束，而你认为自己活在更高维度。不是打破规则，是重新定义规则。'作业要交'——你会让五个人主动帮你写；'不许打架'——你会让对手在舆论上先输掉。你擅长让体制为你让路。",
+      pre: "C位不是你要站的，是别人推你上去的。试过退后，但人群自动把你拱到前面。你的存在感带有侵略性——不是找舞台，是舞台追着你跑。被所有人看着时，你连偷偷难过都不敢。",
+      emo: "今天的情绪状态是个谜——可能热情组织全班活动，明天突然冷若冰霜拒绝所有人。这种切换不是任性，是内心深处有自己都不懂的开关。矛盾的是：正因为unpredict，追随者们反而更忠诚。"
+    },
+
+    // ===== v2.0 新增：情境剧本 =====
+    scenarios: {
+      family: "表弟偷拿红包被全家人批评。你站起来说：'问题出在红包放太明显的地方，就像超市把糖果放收银台旁边，小孩忍不住不是小孩的问题，是设计的问题。'全桌愣住，开始讨论环境影响，表弟危机被转移。你知道'救一个人比惩罚一个人'更能赢得忠诚。",
+      classroom: "新学期选班长，投票前你说三句话：'我当不当不重要，重要的是我们班能不能变成最好的班。要我出力我全力以赴，不选我也全力配合。'你以压倒性优势当选。'全力配合'此刻听起来就是'没有我你们搞不定'。",
+      social: "一群男生争论游戏哪个角色最强，你淡淡说一句：'真正强的是玩家，不是角色。'所有人安静两秒，话题变成谁是班里游戏最强。你没参与，但这句话让你既显得高深莫测，又避免了选边站。",
+      alone: "一个人在家时，你会对着镜子练习表情。'自信微笑'练三分钟，'深思皱眉'练两分钟，'痛心的失望'练一分钟。你观察哪种微表情最有说服力。你从小就知道charisma不是天生的，是可以打磨的产品。",
+      crisis: "运动会你们班和隔壁班冲突眼看要打起来。你走出人群，站在最前面大声说：'我们班的人，往后退三步。'你们班真退了。隔壁班愣在原地不知该不该也退。犹豫的几秒里，体育老师到了。事后三种解读你都收下，因为它们都有用。"
+    },
+
+    // ===== v2.0 新增：隐藏档案 =====
+    hidden: "表面你charismatic、有领袖魅力、一呼百应。其实每次'表演'都在消耗你不知道名字的能量。你不是不累，是不敢累——担心一旦停下来，那个靠魅力维持的世界就会崩塌。你比谁都清楚：追随者们追随的不是你，是他们想象中的你。你早就忘了，去掉所有演技之后，原来的自己长什么样。",
+
+    // ===== v2.0 新增：人格关系谱 =====
+    relations: {
+      best: {
+        code: "TRUMP",
+        name: "儿童政客",
+        reason: "他是台面上的交易家，你是台下的操盘手。一个擅长拉票，一个擅长控局。联手能把年级变成你们的选民基础。"
+      },
+      worst: {
+        code: "WALL",
+        name: "奖状陈列品",
+        reason: "他代表着一种你早已抛弃的生存策略——靠顺从换取认可。你们是学生世界的两个极端，互相对立又隐约互为镜像。"
+      },
+      mystery: {
+        code: "DAMN",
+        name: "背后冷刀",
+        reason: "你习惯了被看见、被追随、被注视。而他完全在你看不见的地方运作，甚至不知何时看你。这种不可控让你不安。"
+      }
+    },
+
+    // ===== v2.0 新增：成长预言 =====
+    prophecy: "通往有影响力的人路上加速奔跑。创业者、政治家、或靠信你吃饭。警告：它赢得很多，也丧失不被评价自由。五十岁若找到摘下面具的人，那是最大财富。你能成功。问题是你快乐吗？答案在手里，藏在你不敢看的地方。"
+  }
+};
+
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = { PERSONAS };
+}
+</script>
+
+  <script>
+    /* =========================================================
+       KidTI — 单页应用主逻辑
+       ========================================================= */
+
+
+
+    // 维度标签映射
+    const DIMENSION_META = {
+      NRG: { label: "能量源",    low: "REACTOR 放电型", high: "BATTERY 充电型", css: "nrg" },
+      RUL: { label: "规则观",    low: "WOLF 反骨型",    high: "SHEEP 顺毛型",   css: "rul" },
+      PRE: { label: "存在感",    low: "SPOTLIGHT 聚光型",high: "BLACKHOLE 黑洞型",css: "pre" },
+      EMO: { label: "情绪天气",  low: "LAKE 静海型",    high: "STORM 暴雨型",   css: "emo", fog: "FOG 迷雾型" },
+    };
+
+    // 从题目数据计算各维度的理论最大/最小分值
+    function computeDimensionBounds() {
+      const bounds = { NRG: { min: 0, max: 0 }, RUL: { min: 0, max: 0 }, PRE: { min: 0, max: 0 }, EMO: { min: 0, max: 0 } };
+      QUESTIONS.forEach(q => {
+        const dimMax = { NRG: -Infinity, RUL: -Infinity, PRE: -Infinity, EMO: -Infinity };
+        const dimMin = { NRG: Infinity, RUL: Infinity, PRE: Infinity, EMO: Infinity };
+        q.options.forEach(opt => {
+          Object.entries(opt.scores).forEach(([dim, val]) => {
+            dimMax[dim] = Math.max(dimMax[dim], val);
+            dimMin[dim] = Math.min(dimMin[dim], val);
+          });
+        });
+        ['NRG', 'RUL', 'PRE', 'EMO'].forEach(dim => {
+          if (dimMax[dim] !== -Infinity) bounds[dim].max += dimMax[dim];
+          if (dimMin[dim] !== Infinity) bounds[dim].min += dimMin[dim];
+        });
+      });
+      return bounds;
+    }
+    const DIM_BOUNDS = computeDimensionBounds();
+
+    // ----- 状态对象 -----
+    const state = window.state = {
+      currentQuestion: 0,
+      answers: [],       // 每题选中的 option index
+      scores: { NRG: 0, RUL: 0, PRE: 0, EMO: 0 },
+      d4Scores: [],      // D4 每题的 EMO 分值，用于方差计算
+      personaCode: null,
+    };
+
+    // ----- DOM 引用 -----
+    const $ = (id) => document.getElementById(id);
+    const views = {
+      start:  $('view-start'),
+      quiz:   $('view-quiz'),
+      result: $('view-result'),
+    };
+
+    // ----- 视图切换 -----
+    function switchView(name) {
+      Object.values(views).forEach(el => el.classList.add('hidden'));
+      views[name].classList.remove('hidden');
+      // 同步 URL（避免污染历史）
+      const url = new URL(window.location.href);
+      if (name === 'start') {
+        url.searchParams.delete('view');
+        url.searchParams.delete('code');
+      } else {
+        url.searchParams.set('view', name);
+      }
+      window.history.replaceState(null, '', url.toString());
+      // 滚动置顶
+      views[name].scrollTop = 0;
+    }
+
+    // ----- 应用对象 -----
+    const app = {
+      init() {
+        // 解析 URL 参数
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get('code');
+        const view = params.get('view');
+
+        if (code && PERSONAS[code.toUpperCase()]) {
+          // 深链直接进结果页
+          this.showResult(code.toUpperCase());
+          return;
+        }
+
+        if (view === 'quiz' && state.answers.length > 0) {
+          switchView('quiz');
+          this.renderQuestion();
+        } else if (view === 'result' && state.personaCode) {
+          switchView('result');
+          this.renderResult();
+        } else {
+          switchView('start');
+        }
+      },
+
+      startQuiz() {
+        // 重置状态
+        state.currentQuestion = 0;
+        state.answers = [];
+        state.scores = { NRG: 0, RUL: 0, PRE: 0, EMO: 0 };
+        state.d4Scores = [];
+        state.personaCode = null;
+        switchView('quiz');
+        this.renderQuestion();
+      },
+
+      renderQuestion() {
+        const q = QUESTIONS[state.currentQuestion];
+        const total = QUESTIONS.length;
+        const current = state.currentQuestion + 1;
+
+        // 进度
+        $('progress-text').textContent = `第 ${current} 题 / 共 ${total} 题`;
+        $('progress-fill').style.width = `${(current / total) * 100}%`;
+
+        // 题目
+        $('question-text').textContent = q.text;
+
+        // 选项
+        const list = $('options-list');
+        list.innerHTML = '';
+        q.options.forEach((opt, idx) => {
+          const btn = document.createElement('button');
+          btn.className = 'option-btn';
+          if (state.answers[state.currentQuestion] === idx) {
+            btn.classList.add('selected');
+          }
+          btn.innerHTML = `
+            <span class="option-label">${opt.label}</span>
+            <span class="option-text">${opt.text}</span>
+          `;
+          btn.onclick = () => this.selectOption(idx);
+          list.appendChild(btn);
+        });
+
+        // 上一题按钮
+        $('btn-prev').classList.toggle('hidden', state.currentQuestion === 0);
+      },
+
+      selectOption(idx) {
+        const q = QUESTIONS[state.currentQuestion];
+        const prevIdx = state.answers[state.currentQuestion];
+
+        // 如果已经选过，先减去旧分数
+        if (prevIdx !== undefined) {
+          const prevOpt = q.options[prevIdx];
+          Object.entries(prevOpt.scores).forEach(([dim, val]) => {
+            state.scores[dim] -= val;
+          });
+          if (q.dimension === 'EMO') {
+            state.d4Scores.pop();
+          }
+        }
+
+        // 记录新答案
+        state.answers[state.currentQuestion] = idx;
+        const opt = q.options[idx];
+        Object.entries(opt.scores).forEach(([dim, val]) => {
+          state.scores[dim] += val;
+        });
+        if (q.dimension === 'EMO') {
+          state.d4Scores.push(opt.scores.EMO || 0);
+        }
+
+        // 自动前进
+        if (state.currentQuestion < QUESTIONS.length - 1) {
+          state.currentQuestion += 1;
+          this.renderQuestion();
+        } else {
+          this.finishQuiz();
+        }
+      },
+
+      goPrev() {
+        if (state.currentQuestion > 0) {
+          state.currentQuestion -= 1;
+          this.renderQuestion();
+        }
+      },
+
+      finishQuiz() {
+        // 计算维度极性
+        const dims = this.calculateDimensions();
+        // 匹配人格
+        const code = typeof matchPersona === 'function'
+          ? matchPersona(dims)
+          : this._matchPersonaFallback(dims);
+        state.personaCode = code;
+        this.showResult(code);
+      },
+
+      calculateDimensions() {
+        // D1/D2/D3: 高分 = high, 低分 = low
+        // 判定阈值：以 0 为界（正负分），实际分范围约 ±12
+        const dims = {};
+        dims.NRG = state.scores.NRG >= 0 ? 'BATTERY' : 'REACTOR';
+        dims.RUL = state.scores.RUL >= 0 ? 'SHEEP' : 'WOLF';
+        dims.PRE = state.scores.PRE >= 0 ? 'BLACKHOLE' : 'SPOTLIGHT';
+
+        // D4: 使用 scoring.js 的 calculateD4，或内联回退
+        if (typeof calculateD4 === 'function' && state.d4Scores.length > 0) {
+          const d4 = calculateD4(state.d4Scores);
+          dims.EMO = d4.result;
+        } else {
+          dims.EMO = this._calculateD4Fallback();
+        }
+        return dims;
+      },
+
+      _calculateD4Fallback() {
+        if (state.d4Scores.length === 0) return 'FOG';
+        const n = state.d4Scores.length;
+        const mean = state.d4Scores.reduce((a, b) => a + b, 0) / n;
+        const variance = state.d4Scores.reduce((s, v) => s + Math.pow(v - mean, 2), 0) / n;
+        const threshold = 3.5;
+        if (variance > threshold) return 'FOG';
+        return mean >= 0 ? 'STORM' : 'LAKE';
+      },
+
+      _matchPersonaFallback(dims) {
+        const map = {
+          "BATTERY+SHEEP": {
+            BLACKHOLE: { STORM: "KPBL", LAKE: "WALL", FOG: "IMOK" },
+            SPOTLIGHT: { STORM: "KPI",  LAKE: "DAREN", FOG: "CTRLC" },
+          },
+          "BATTERY+WOLF": {
+            BLACKHOLE: { STORM: "NUKE", LAKE: "DAMN", FOG: "NEIG" },
+            SPOTLIGHT: { STORM: "TNT",  LAKE: "STUDY", FOG: "GODD" },
+          },
+          "REACTOR+SHEEP": {
+            BLACKHOLE: { STORM: "GLUE", LAKE: "502ER", FOG: "RUOK?" },
+            SPOTLIGHT: { STORM: "JOKER", LAKE: "MAPI", FOG: "TRUMP" },
+          },
+          "REACTOR+WOLF": {
+            BLACKHOLE: { STORM: "CHAOS", LAKE: "STEAM", FOG: "IPHONE" },
+            SPOTLIGHT: { STORM: "BOSS",  LAKE: "YINM", FOG: "ELON" },
+          },
+        };
+        const key = `${dims.NRG}+${dims.RUL}`;
+        return map[key]?.[dims.PRE]?.[dims.EMO] || 'KPBL';
+      },
+
+      showResult(code) {
+        state.personaCode = code;
+        switchView('result');
+        this.renderResult();
+      },
+
+      renderResult() {
+        const p = PERSONAS[state.personaCode] || PERSONAS["KPBL"];
+        document.getElementById("result-code").textContent = state.personaCode;
+        document.getElementById("result-name").textContent = p.name;
+        document.getElementById("result-tagline").textContent = p.definition || p.tagline || "";
+        document.getElementById("result-slogan").textContent = p.slogan;
+
+        // 详细解读
+        const descEl = document.getElementById("result-description");
+        if (p.description) {
+          descEl.innerHTML = p.description.split("\n").map(par => "<p>" + par + "</p>").join("");
+          descEl.style.display = "block";
+        } else {
+          descEl.style.display = "none";
+        }
+
+        // 配图
+        const img = document.getElementById("result-img");
+        const fallback = document.getElementById("result-img-fallback");
+        const imageCode = state.personaCode.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const imgPath = "assets/personas/persona-" + imageCode + ".webp";
+        img.alt = p.name;
+        img.style.display = "block";
+        fallback.style.display = "none";
+        img.onload = function() {
+          console.log('[KidTI] 人格图片加载成功:', imgPath);
+        };
+        img.onerror = function() {
+          console.error('[KidTI] 人格图片加载失败:', imgPath, '请检查服务器根目录是否包含 assets/ 文件夹');
+          img.style.display = 'none';
+          fallback.style.display = 'flex';
+        };
+        img.src = imgPath;
+
+        // ===== v2.0 诊断书渲染 =====
+        const diagBook = document.getElementById("diagnosis-book");
+
+        // 核心画像
+        const portraitEl = document.getElementById("diag-portrait-body");
+        if (p.reading) {
+          portraitEl.innerHTML = p.reading.split("\n").map(par => "<p>" + par + "</p>").join("");
+          document.getElementById("diag-portrait").style.display = "block";
+        } else {
+          document.getElementById("diag-portrait").style.display = "none";
+        }
+
+        // 人格成分解析
+        const compEl = document.getElementById("diag-components-body");
+        if (p.components) {
+          const compMeta = [
+            { key: 'nrg', label: '能量源', css: 'nrg' },
+            { key: 'rul', label: '规则观', css: 'rul' },
+            { key: 'pre', label: '存在感', css: 'pre' },
+            { key: 'emo', label: '情绪天气', css: 'emo' },
+          ];
+          compEl.innerHTML = compMeta.map(c => {
+            const text = p.components[c.key];
+            return '<div class="comp-item ' + c.css + '"><div class="comp-label">' + c.label + '</div><div class="comp-text">' + text + '</div></div>';
+          }).join('');
+          document.getElementById("diag-components").style.display = "block";
+        } else {
+          document.getElementById("diag-components").style.display = "none";
+        }
+
+        // 情境剧本
+        const scenEl = document.getElementById("diag-scenarios-body");
+        if (p.scenarios) {
+          const scenMeta = [
+            { key: 'family', icon: '🏠', label: '家庭餐桌' },
+            { key: 'classroom', icon: '🎓', label: '学校课堂' },
+            { key: 'social', icon: '👥', label: '课间社交' },
+            { key: 'alone', icon: '🌙', label: '独处时刻' },
+            { key: 'crisis', icon: '⚡', label: '突发冲突' },
+          ];
+          scenEl.innerHTML = scenMeta.map(s => {
+            const text = p.scenarios[s.key];
+            return '<div class="scenario-item"><div class="scenario-label"><span class="scenario-icon">' + s.icon + '</span>' + s.label + '</div><div class="scenario-text">' + text + '</div></div>';
+          }).join('');
+          document.getElementById("diag-scenarios").style.display = "block";
+        } else {
+          document.getElementById("diag-scenarios").style.display = "none";
+        }
+
+        // 隐藏档案
+        const hiddenEl = document.getElementById("diag-hidden-body");
+        if (p.hidden) {
+          hiddenEl.innerHTML = '<p>' + p.hidden + '</p>';
+          document.getElementById("diag-hidden").style.display = "block";
+        } else {
+          document.getElementById("diag-hidden").style.display = "none";
+        }
+
+        // 人格关系谱
+        const relEl = document.getElementById("diag-relations-body");
+        if (p.relations) {
+          const relMeta = [
+            { key: 'best', tag: '最佳拍档', css: 'best' },
+            { key: 'worst', tag: '天生冤家', css: 'worst' },
+            { key: 'mystery', tag: '最看不懂', css: 'mystery' },
+          ];
+          relEl.innerHTML = relMeta.map(r => {
+            const data = p.relations[r.key];
+            return '<div class="relation-card ' + r.css + '"><div class="relation-tag ' + r.css + '">' + r.tag + '</div><div class="relation-name">' + data.code + ' · ' + data.name + '</div><div class="relation-reason">' + data.reason + '</div></div>';
+          }).join('');
+          document.getElementById("diag-relations").style.display = "block";
+        } else {
+          document.getElementById("diag-relations").style.display = "none";
+        }
+
+        // 成长预言
+        const prophEl = document.getElementById("diag-prophecy-body");
+        if (p.prophecy) {
+          prophEl.textContent = p.prophecy;
+          document.getElementById("diag-prophecy").style.display = "block";
+        } else {
+          document.getElementById("diag-prophecy").style.display = "none";
+        }
+
+        // 如果没有任何 v2.0 字段，隐藏整个诊断书
+        const hasV2 = p.components || p.scenarios || p.hidden || p.relations || p.prophecy;
+        diagBook.style.display = (p.reading || hasV2) ? "block" : "none";
+
+        // 维度条
+        const hasQuizData = state.answers.length === QUESTIONS.length;
+        const container = document.getElementById("dimensions-list");
+        container.innerHTML = "";
+
+        if (!hasQuizData) {
+          container.innerHTML = '<div style="text-align:center;color:var(--text-secondary);font-size:13px;padding:12px 0;">完成测试后查看你的维度分析</div>';
+        } else {
+          const dims = this.calculateDimensions();
+          const dimKeys = ["NRG", "RUL", "PRE", "EMO"];
+
+          dimKeys.forEach(key => {
+            const meta = DIMENSION_META[key];
+            const score = state.scores[key];
+            const bound = DIM_BOUNDS[key];
+
+            let left, width;
+            if (score >= 0) {
+              const ratio = bound.max > 0 ? score / bound.max : 0;
+              const pct = Math.min(ratio * 50, 50);
+              left = 50;
+              width = pct;
+            } else {
+              const ratio = bound.min < 0 ? Math.abs(score) / Math.abs(bound.min) : 0;
+              const pct = Math.min(ratio * 50, 50);
+              left = 50 - pct;
+              width = pct;
+            }
+
+            let labelText;
+            if (key === "EMO") {
+              labelText = dims.EMO === "FOG" ? meta.fog : (dims.EMO === "STORM" ? meta.high : meta.low);
+            } else {
+              labelText = dims[key] === meta.high.split(" ")[0] ? meta.high : meta.low;
+            }
+
+            const item = document.createElement("div");
+            item.className = "dim-item";
+            item.innerHTML = '<div class="dim-header"><span class="dim-label">' + meta.label + '</span><span class="dim-value">' + labelText + '</span></div><div class="dim-bar-track"><div class="dim-bar-fill ' + meta.css + '" style="left: ' + left + '%; width: ' + width + '%"></div></div><div class="dim-poles"><span>' + meta.low.split(" ")[0] + '</span><span>' + meta.high.split(" ")[0] + '</span></div>';
+            container.appendChild(item);
+          });
+        }
+
+        // 同步 URL code 参数
+        const url = new URL(window.location.href);
+        url.searchParams.set("view", "result");
+        url.searchParams.set("code", state.personaCode);
+        window.history.replaceState(null, "", url.toString());
+      },
+
+
+
+
+      // ===== Poster / Share Methods =====
+
+      copyLink() {
+        const url = window.location.href;
+        const text = "我在儿童TI测出了「" + state.personaCode + "」——" + (PERSONAS[state.personaCode]?.name || "") + "。你是什么儿童？";
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText().then(() => {
+            alert('结果链接已复制到剪贴板');
+          }).catch(() => {
+            prompt('复制以下链接分享给朋友：', url);
+          });
+        } else {
+          prompt('复制以下链接分享给朋友：', url);
+        }
+      },
+
+      drawPosterBase(ctx, p, w, h) {
+        // Background
+        ctx.fillStyle = '#F7F5F0';
+        ctx.fillRect(0, 0, w, h);
+
+        // Border
+        ctx.strokeStyle = '#E0DCD4';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(20, 20, w - 40, h - 40);
+
+        // Brand
+        ctx.fillStyle = '#2D2D2D';
+        ctx.font = 'bold 36px -apple-system, PingFang SC, Microsoft YaHei, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('儿童TI', w / 2, 80);
+        ctx.font = '22px -apple-system, PingFang SC, Microsoft YaHei, sans-serif';
+        ctx.fillStyle = '#6B6B6B';
+        ctx.fillText('你是什么儿童？', w / 2, 115);
+
+        // Code
+        ctx.fillStyle = '#2D2D2D';
+        ctx.font = 'bold 72px -apple-system, PingFang SC, Microsoft YaHei, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(state.personaCode, w / 2, 560);
+
+        // Name
+        ctx.fillStyle = '#FF6B6B';
+        ctx.font = 'bold 40px -apple-system, PingFang SC, Microsoft YaHei, sans-serif';
+        ctx.fillText(p.name, w / 2, 620);
+
+        // Definition
+        ctx.fillStyle = '#6B6B6B';
+        ctx.font = '26px -apple-system, PingFang SC, Microsoft YaHei, sans-serif';
+        const def = p.definition || p.tagline || '';
+        ctx.fillText(def, w / 2, 670);
+
+        // Slogan
+        ctx.fillStyle = '#2D2D2D';
+        ctx.font = 'italic 24px -apple-system, PingFang SC, Microsoft YaHei, sans-serif';
+        const slogan = p.slogan || '';
+        const maxWidth = w - 120;
+        const words = slogan.split('');
+        let line = '';
+        let y = 730;
+        for (let i = 0; i < words.length; i++) {
+          const testLine = line + words[i];
+          const metrics = ctx.measureText(testLine);
+          if (metrics.width > maxWidth && i > 0) {
+            ctx.fillText(line, w / 2, y);
+            line = words[i];
+            y += 36;
+          } else {
+            line = testLine;
+          }
+        }
+        ctx.fillText(line, w / 2, y);
+
+        // QR code
+        const qrY = h - 280;
+        if (typeof kjua !== 'undefined') {
+          const qr = kjua({
+            text: window.location.href,
+            size: 180,
+            fill: '#2D2D2D',
+            back: '#F7F5F0',
+            rounded: 8,
+          });
+          ctx.drawImage(qr, (w - 180) / 2, qrY);
+        } else {
+          ctx.strokeStyle = '#E0DCD4';
+          ctx.lineWidth = 2;
+          ctx.strokeRect((w - 180) / 2, qrY, 180, 180);
+          ctx.fillStyle = '#6B6B6B';
+          ctx.font = '16px sans-serif';
+          ctx.fillText('二维码', w / 2, qrY + 95);
+        }
+
+        // QR label
+        ctx.fillStyle = '#6B6B6B';
+        ctx.font = '22px -apple-system, PingFang SC, Microsoft YaHei, sans-serif';
+        ctx.fillText('扫码测测你是什么儿童', w / 2, qrY + 220);
+
+        // Footer
+        ctx.fillStyle = '#999';
+        ctx.font = '16px -apple-system, PingFang SC, Microsoft YaHei, sans-serif';
+        ctx.fillText('kidti.pages.dev', w / 2, h - 50);
+      },
+
+      generatePoster() {
+        const canvas = document.getElementById('poster-canvas');
+        const ctx = canvas.getContext('2d');
+        const p = PERSONAS[state.personaCode] || PERSONAS['KPBL'];
+        const w = 750;
+        const h = 1334;
+
+        // Draw base content first
+        this.drawPosterBase(ctx, p, w, h);
+
+        // Try to load persona image independently
+        const imageCode = state.personaCode.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const imgPath = 'assets/personas/persona-' + imageCode + '.webp';
+        const posterImg = new Image();
+        posterImg.onload = () => {
+          const imgSize = 320;
+          const imgX = (w - imgSize) / 2;
+          const imgY = 150;
+          ctx.save();
+          ctx.beginPath();
+          ctx.roundRect(imgX, imgY, imgSize, imgSize, 16);
+          ctx.clip();
+          ctx.drawImage(posterImg, imgX, imgY, imgSize, imgSize);
+          ctx.restore();
+          console.log('[KidTI] 海报图片加载成功:', imgPath);
+        };
+        posterImg.onerror = () => {
+          // Fallback: draw emoji
+          ctx.font = '120px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('🎭', w / 2, 340);
+          console.error('[KidTI] 海报图片加载失败:', imgPath);
+        };
+        posterImg.src = imgPath;
+      },
+
+      showPoster() {
+        document.getElementById('poster-modal').classList.remove('hidden');
+        this.generatePoster();
+      },
+
+      closePoster() {
+        document.getElementById('poster-modal').classList.add('hidden');
+      },
+
+      savePoster() {
+        const canvas = document.getElementById('poster-canvas');
+        canvas.toBlob((blob) => {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = "kidti-" + state.personaCode + ".png";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }, 'image/png');
+      },
+
+      shareResult() {
+        // Show poster modal first
+        this.showPoster();
+        
+        // Also try native share
+        const url = window.location.href;
+        const text = `我在儿童TI测出了「${state.personaCode}」——${PERSONAS[state.personaCode]?.name || ''}。你是什么儿童？`;
+        const shareData = {
+          title: '儿童TI — 你是什么儿童？',
+          text: text,
+          url: url,
+        };
+        if (navigator.share) {
+          navigator.share(shareData).catch(() => {});
+        } else if (navigator.clipboard) {
+          navigator.clipboard.writeText(`${text}\n${url}`).then(() => {
+            alert('结果链接已复制到剪贴板');
+          }).catch(() => {
+            prompt('复制以下链接分享给朋友：', url);
+          });
+        } else {
+          prompt('复制以下链接分享给朋友：', url);
+        }
+      },
+
+      restart() {
+        state.currentQuestion = 0;
+        state.answers = [];
+        state.scores = { NRG: 0, RUL: 0, PRE: 0, EMO: 0 };
+        state.d4Scores = [];
+        state.personaCode = null;
+        switchView('start');
+      },
+    };
+
+    // 启动
+    document.addEventListener('DOMContentLoaded', () => app.init());
+  </script>
+  
+</body>
+</html>
